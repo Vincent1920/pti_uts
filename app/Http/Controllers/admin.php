@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Barang;
-
+use App\Models\Diskon;
 use App\Models\CartItem;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
@@ -33,10 +33,11 @@ class admin extends Controller
         ]);
     }
     public function cart(){
-        
+        $diskon = Diskon::where('status', true)->first();
         $item_cart = User::whereHas('cartItems')->with('cartItems.barang')->get();  
             return view('admins.pages.list_cart', [
-             'item_cart' => $item_cart
+             'item_cart' => $item_cart,
+             'diskon' =>$diskon
         ]);
     }
 }

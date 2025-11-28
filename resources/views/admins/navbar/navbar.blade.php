@@ -1,45 +1,35 @@
-<nav id="sidebarMenu" class=" col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active text-decoration-none" aria-current="page" href="{{route('admin.dashboard')}}">
-            <button class="admin-custom-btn admin-btn-5"><span>Dashboard</span></button>
-          </a>
-        </li>   
-        <li class="nav-item">
-          <a class="nav-link" href="/post">
-            <button class="admin-custom-btn admin-btn-5"><span>toko</span></button>
-            {{-- <span data-feather="file"></span> --}}
-           
-          </a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="{{route('kategori')}} ">
-          <button class="admin-custom-btn admin-btn-5"><span>kategori</span></button>
-          {{-- <span data-feather="file"></span> --}}
-         
-        </a>
-      </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{route('cart_admin')}} ">
-            <button class="admin-custom-btn admin-btn-5"><span>list cart</span></button>
-            {{-- <span data-feather="file"></span> --}}
-           
-          </a>
-        </li>
-        {{-- <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="shopping-cart"></span>
-            menu
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/news">
-            <span data-feather="file-text"></span>
-            news 
-          </a>
-        </li> --}}
-      </ul>
-    </div>
-  </nav>
-  
+ <nav id="sidebarMenu" class="hidden md:block w-64 bg-white border-r border-gray-200 h-full fixed md:relative z-40 overflow-y-auto">
+            <div class="p-4 space-y-2">
+                
+                <a href="{{route('admin.dashboard')}}" class="block w-full">
+                    <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
+                        <span>Dashboard</span>
+                    </button>
+                </a>
+
+                <a href="/post" class="block w-full">
+                    <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
+                        <span>Toko</span>
+                    </button>
+                </a>
+
+                <a href="{{route('kategori')}} " class="block w-full">
+                    <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
+                        <span>Kategori</span>
+                    </button>
+                </a>
+
+                <a href="{{route('diskon.index')}} " class="block w-full">
+                    <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
+                        <span>diskon</span>
+                    </button>
+                </a>
+
+                <a href="{{route('cart_admin')}} " class="block w-full">
+                    <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
+                        <span>List Cart</span>
+                    </button>
+                </a>
+
+            </div>
+        </nav>

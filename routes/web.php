@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\controller_shop;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\controller_login;
+use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\ControllerKategori;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RegisterController;
@@ -40,6 +41,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('barangs', BarangController::class);
     Route::get('/admin', [admin::class, 'home'])->name('admin');
     Route::get('/admin/dashboard', [admin::class, 'dashboard'])->name('admin.dashboard');
+    
+    // barang 
     Route::get('/post',[BarangController::class,'index'])->name('post');
     Route::get('/creat',[BarangController::class,'create']);
     Route::post('/posts/store',[BarangController::class,'store']);
@@ -53,8 +56,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
     Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
-});
 
+    // diskon
+    Route::get('/diskon', [DiskonController::class, 'index'])->name('diskon.index');
+    Route::get('/diskon/create', [DiskonController::class, 'create'])->name('diskon.create');
+    Route::post('/diskon', [DiskonController::class, 'store'])->name('diskon.store');
+    Route::delete('/diskon/{id}', [DiskonController::class, 'destroy'])->name('diskon.destroy');
+    Route::post('/diskon/{id}/status', [DiskonController::class, 'toggleStatus'])->name('diskon.status');
+
+    
+});
+// Route::prefix('admin')->group(function () {
+//     Route::get('/diskon', [DiskonController::class, 'index'])->name('diskon.index');
+//     Route::get('/diskon/create', [DiskonController::class, 'create'])->name('diskon.create');
+//     Route::post('/diskon', [DiskonController::class, 'store'])->name('diskon.store');
+//     Route::delete('/diskon/{id}', [DiskonController::class, 'destroy'])->name('diskon.destroy');
+//     Route::post('/diskon/{id}/status', [DiskonController::class, 'toggleStatus'])->name('diskon.status');
+// });
 
 Route::get('/learn',[index::class,'learn'])->name('learn');
 Route::get('/kategori/{kategori_id}', [controller_shop::class, 'show'])->name('kategori.show');
