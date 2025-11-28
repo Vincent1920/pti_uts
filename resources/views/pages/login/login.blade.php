@@ -91,9 +91,9 @@
 
 <body class="bg-choco-bg font-montserrat flex flex-col items-center justify-center min-h-screen relative overflow-x-hidden" onload="hideLoadingScreen()">
 
-    <div id="loading-screen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
+    {{-- <div id="loading-screen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
         <img src="img/b734317dc97d8d22aec2f5b29e0e8672-removebg-preview.png" alt="Loading..." class="w-24 h-24 animate-spin-slow object-contain">
-    </div>
+    </div> --}}
 
     <nav class="absolute top-0 w-full h-20 flex items-center justify-between px-10 z-50 animate-slide-down hover:bg-white/90 hover:text-[#503c32] transition-colors duration-300">
         <ul class="flex items-center">
@@ -105,22 +105,14 @@
 
     <div class="mt-24 w-full"></div>
 
+    {{-- register --}}
     <div class="bg-white rounded-[10px] shadow-2xl relative overflow-hidden w-[768px] max-w-full min-h-[480px] container" id="container">
-        
         <div class="absolute top-0 left-0 w-1/2 h-full transition-all duration-600 ease-in-out opacity-0 z-[1] form-container sign-up-container bg-white">
             <form action="{{ route('register') }}" method="POST" class="bg-white flex flex-col items-center justify-center h-full px-12 text-center">
                 @csrf
                 <h1 class="font-bold text-3xl mb-0 text-[#e6c58c]">Create Account</h1>
                 
-                <div class="w-full my-2">
-                    @if(session()->has('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded relative text-sm">
-                        {{ session('success') }}
-                    </div>
-                    @endif
-                </div>
-
-                <span class="text-xs text-[#e6c58c] mb-4">use your email for registration</span>
+                <span class="text-xs text-[#e6c58c] mb-4 mt-4">use your email for registration</span>
                 
                 <input type="text" name="name" placeholder="Name" class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
                 <input type="text" name="username" placeholder="Username" class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
@@ -133,30 +125,19 @@
             </form>
         </div>
 
+        {{-- login --}}
+
         <div class="absolute top-0 left-0 w-1/2 h-full transition-all duration-600 ease-in-out z-[2] form-container sign-in-container bg-white">
             <form action="{{route('postlogin')}}" method="POST" class="bg-white flex flex-col items-center justify-center h-full px-12 text-center">
                 @csrf
                 <h1 class="font-bold text-3xl mb-4 text-[#e6c58c]">Sign in</h1>
                 
-                <div class="w-full my-2">
-                    @if(session()->has('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded relative text-sm mb-2">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    @if(session()->has('error'))
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-sm mb-2">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                </div>
-
                 <span class="text-xs text-[#e6c58c] mb-4">or use your account</span>
 
                 <input type="email" id="email" name="email" placeholder="Email" class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
                 <input type="password" id="password" name="password" placeholder="Password" class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
                 
-                <a href="#" class="text-[#333] text-sm no-underline my-4 border-b border-transparent hover:border-[#333]">Forgot your password?</a>
+                {{-- <a href="#" class="text-[#333] text-sm no-underline my-4 border-b border-transparent hover:border-[#333]">Forgot your password?</a> --}}
                 
                 <button type="submit" class="rounded-[20px] border border-choco-border bg-choco-btn text-[#432900] text-xs font-bold uppercase py-3 px-10 mt-2 tracking-wider transition-transform active:scale-95 focus:outline-none hover:bg-[#e0cba0]">
                     Login
@@ -189,6 +170,45 @@
 
     <script src="../../js/login/login.js"></script>
     <script src="../../js/loading.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Jika Berhasil (Success)
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#E8D5B5',
+                confirmButtonText: 'OK',
+                color: '#48311B'
+            });
+        @endif
+
+        // Jika Gagal (Error Session)
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Coba Lagi'
+            });
+        @endif
+
+        // Jika Error Validasi (Input salah)
+        @if($errors->any())
+            Swal.fire({
+                icon: 'warning',
+                title: 'Periksa Inputan!',
+                html: "{!! implode('<br>', $errors->all()) !!}", 
+                confirmButtonColor: '#f6d59e',
+                confirmButtonText: 'OK',
+                color: '#48311B'
+            });
+        @endif
+    </script>
 
 </body>
 </html>

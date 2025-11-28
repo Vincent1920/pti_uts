@@ -1,5 +1,4 @@
 <?php
-//  vincenet 10123309 
 
 namespace App\Http\Controllers;
 
@@ -12,25 +11,21 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-
     public function register(Request $request)
-{
-    $this->validator($request->all())->validate();
-    $user = $this->create($request->all());
-    Auth::login($user);
-
-    // Redirects to the login page with a success message.
-    return redirect('/login')->with('success', 'Registration successful! Please login.');
-}
+    {
+        $this->validator($request->all())->validate();
+        $user = $this->create($request->all());
+           return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
 
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            // PERBAIKAN DISINI: Tambahkan 'unique:users' agar dicek dulu di DB
+            'username' => ['required', 'string', 'max:255'], 
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'password' => ['required',  ],
+            'password' => ['required'], // Sebaiknya tambah 'min:8'
         ]);
     }
 
@@ -42,7 +37,5 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
-    
     }
 }

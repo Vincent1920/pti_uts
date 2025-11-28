@@ -1,10 +1,9 @@
 <?php
-//  vincenet 10123309 
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 class controller_login extends Controller
 {
@@ -29,30 +28,42 @@ class controller_login extends Controller
         return view('adminHome');
 
     }
-    public function login(Request $request)
-    {
-        // Ambil input dari form termasuk captcha
-        $inputVal = $request->only('email', 'password', 'captcha');
-    
-        // Tambahkan validasi captcha
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required',
-            'captcha' => 'required|captcha' // Validasi captcha
-        ]);
-    
-        // Cek apakah login berhasil
-        if (Auth::attempt($request->only('email', 'password'))) {
-            if (Auth::user()->role == 'admin') {
-                return redirect()->route('admin');
-            } else {
-                return redirect('/');
-            }
-        } else {
-            return redirect('login')
-                ->with('error', 'Email, Password, atau CAPTCHA salah.');
-        }
+
+   public function login(Request $request)
+{
+    // 1. Validasi Input (CAPTCHA sudah dihapus)
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    // 2. Cek apakah email ada di database terlebih dahulu
+    $user = User::where('email', $request->email)->first();
+
+    // Jika user tidak ditemukan (Email belum ada)
+    if (!$user) {
+        return redirect('login')->with('error', 'Email belum terdaftar. Silakan registrasi.');
     }
+
+    // 3. Coba Login (Cek Password)
+    // Auth::attempt akan mengecek apakah password cocok dengan email
+    if (Auth::attempt($request->only('email', 'password'))) {
+        
+        // Regenerate session untuk keamanan (mencegah session fixation)
+        $request->session()->regenerate();
+
+        // Cek Role
+        if (Auth::user()->role == 'admin') {
+            return redirect()->route('admin');
+        } else {
+            return redirect('/')->with('success', 'Login Berhasil!');
+        }
+    } else {
+        // 4. Jika email ada tapi Auth::attempt gagal, berarti Password Salah
+        return redirect('login')
+            ->with('error', 'Password yang Anda masukkan salah.');
+    }
+}
             public function logout(Request $request)
             {
                 // Debugging Auth user sebelum logout
