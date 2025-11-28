@@ -1,9 +1,3 @@
-    <!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
 @extends('layouts.app')
 
 @section('content')
@@ -26,4 +20,5 @@
         </div>
     </div>
 </div>
+
 @endsection

@@ -1,10 +1,4 @@
-    <!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="en">
 
     <head>

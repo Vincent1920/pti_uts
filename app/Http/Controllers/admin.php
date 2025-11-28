@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Barang;
 
 use App\Models\CartItem;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 // use Illuminate\Database\Eloquent\
 class admin extends Controller
@@ -25,8 +26,9 @@ class admin extends Controller
     }
     public function dashboard(){
         $barangs = Barang::all();
+        $kategori = Kategori::all();
         return view('admins.pages.dashboard',[
-
+            'kategori' => $kategori,
             'barangs' => $barangs,
         ]);
     }

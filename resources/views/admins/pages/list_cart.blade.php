@@ -1,11 +1,5 @@
 @extends('admins.index')
 @section('admin')
-<!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
 <div class="accordion" id="accordionExample">
 @foreach ($item_cart as $user)
 @if ($user->cartItems->isNotEmpty())

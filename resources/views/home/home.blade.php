@@ -1,10 +1,4 @@
-    <!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
-    @extends('index')
+ @extends('index')
     @section('container-home')
     <div class="container ">
         <img src="img/Hero_Web_desk_2024_19 1.jpg" alt="">

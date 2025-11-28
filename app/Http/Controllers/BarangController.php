@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\File;
 
 class BarangController extends Controller
 {
@@ -43,48 +44,51 @@ class BarangController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'deskripsi' => 'required',
-            'harga' => 'required|numeric',
-            'berat_barang' => 'required',
-            'kategori_id' => 'required|exists:kategoris,id',
-        ]);
-    
+{
+    // 1. Validasi Input
+    $validated = $request->validate([
+        'title'        => 'required|string|max:255',
+        'img'          => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'deskripsi'    => 'required|string',
+        'harga'        => 'required|numeric', // Pastikan input hidden 'harga' yang diterima
+        'berat_barang' => 'required',
+        'jumlah_barang' => 'required|numeric|min:1',
+        'kategori_id'  => 'required|exists:kategoris,id',
+    ]);
+
+    try {
+        // 2. Proses Upload Gambar
         if ($request->hasFile('img')) {
-            $imageName = time() . '.' . $request->img->extension();
-            $request->img->move(public_path('images'), $imageName);
+            $image = $request->file('img');
+            // Nama file: time_random.extension (agar lebih unik)
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
         } else {
-            return back()->withErrors(['img' => 'Image upload failed.']);
+            return back()->withErrors(['img' => 'Gambar wajib diupload.'])->withInput();
         }
-    
-        // Simpan produk ke database
-        $product = barang::create([
-            'title' => $request->title,
+
+        // 3. Simpan ke Database
+        Barang::create([
+            'title'        => $request->title,
             'berat_barang' => $request->berat_barang,
-            'img' => $imageName,
-            'deskripsi' => $request->deskripsi,
-            'harga' => $request->harga,
-            'user_id' => Auth::id(),
-            'kategori_id' => $request->kategori_id,
+            'img'          => $imageName,
+            'deskripsi'    => $request->deskripsi,
+            'harga'        => $request->harga,
+            'kategori_id'  => $request->kategori_id,
+             'jumlah_barang'=> $request->jumlah_barang,
+            'user_id'      => Auth::id(), // Mengambil ID user yang sedang login
         ]);
-    
-        // Generate QR code yang berisi link menuju halaman produk
-        // $qrCodePath = 'qrcodes/' . $product->id . '.png';
-        // QrCode::format('png')
-        //     ->size(200)
-        //     ->generate(route('show', $product->id),
-        //      storage_path('images' . $qrCodePath));
-    
-        // // Update produk dengan path QR code
-        // $product->update([
-        //     'qr_code' => $qrCodePath
-        // ]);
-    
-        return redirect()->route('post')->with('success', 'Data has been saved with QR code.');
+
+        // 4. Redirect Sukses
+        return redirect()->route('post')->with('success', 'Data barang berhasil ditambahkan.');
+
+    } catch (\Exception $e) {
+        // 5. Error Handling (Jika gagal simpan)
+        return back()
+            ->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])
+            ->withInput();
     }
+}
 
     
     /**
@@ -122,8 +126,8 @@ class BarangController extends Controller
         'harga' => 'required|numeric',
         'berat_barang' => 'required|string|max:255',
         'deskripsi' => 'nullable|string',
+        'jumlah_barang' => 'required|numeric|min:1',
         'kategori_id' => 'required|exists:kategoris,id', 
-        
         'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', 
     ]);
 
@@ -134,6 +138,7 @@ class BarangController extends Controller
     $barang->title = $request->input('title');
     $barang->harga = $request->input('harga');
     $barang->berat_barang = $request->input('berat_barang');
+    $barang->jumlah_barang = $request->jumlah_barang;
     $barang->kategori_id = $request->input('kategori_id'); // Perbarui kategori_id
     $barang->deskripsi = $request->input('deskripsi');
 
@@ -161,22 +166,26 @@ class BarangController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        // Temukan barang berdasarkan ID
-        $barang = Barang::findOrFail($id);
-    
-        // Path gambar yang akan dihapus
+{
+    // 1. Cari data barang
+    $barang = Barang::findOrFail($id);
+
+    // 2. Definisikan path gambar
+    // Pastikan kolom img tidak kosong untuk menghindari error path
+    if ($barang->img) {
         $imagePath = public_path('images/' . $barang->img);
-    
-        // Hapus barang dari database
-        $barang->delete();
-    
-        // Hapus gambar jika ada
-        if (file_exists($imagePath)) {
-            unlink($imagePath); // Hapus file gambar
+
+        // 3. Cek apakah file fisik benar-benar ada di folder
+        if (File::exists($imagePath)) {
+            // Hapus file gambar
+            File::delete($imagePath);
         }
-    
-        return redirect()->route('post')->with('success', 'Barang dan gambar berhasil dihapus.');
     }
+
+    // 4. Hapus data dari database
+    $barang->delete();
+
+    return redirect()->route('post')->with('success', 'Barang dan gambar berhasil dihapus.');
+}
     
 }

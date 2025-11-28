@@ -1,110 +1,148 @@
 @extends('admins.index')
-@section('admin')
 
-<div class="col-lg-8">
-    <div
-        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">edit Barang</h1>
+@section('admin')
+<div class="max-w-3xl mx-auto">
+    
+    <div class="border-b border-gray-200 pb-4 mb-6 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-choco">Edit Barang</h1>
+            <p class="text-sm text-gray-500 mt-1">Perbarui informasi produk: <strong>{{ $barang->title }}</strong></p>
+        </div>
+        <a href="{{ route('post') }}" class="text-sm text-gray-500 hover:text-choco transition">
+            <i class="bi bi-arrow-left"></i> Kembali
+        </a>
     </div>
 
-
-    <form method="POST" action="{{ route('barangs.update',$barang->id) }}" class="mb-5" enctype="multipart/form-data">
+    <form method="post" action="{{ route('barangs.update', $barang->id) }}" class="space-y-6 mb-10" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
-                required autofocus value="{{ $barang->title }}">
+        @method('PUT') <div>
+            <label for="title" class="block text-sm font-medium text-gray-700">Title / Nama Produk</label>
+            <div class="mt-1">
+                <input type="text" 
+                       id="title" 
+                       name="title" 
+                       required 
+                       value="{{ old('title', $barang->title) }}"
+                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-choco focus:ring-choco sm:text-sm p-2.5 border @error('title') border-red-500 @enderror">
+            </div>
             @error('title')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-
-
-        <div class="mb-3">
-            <label for="harga" class="form-label">harga</label>
-            <input type="text" class="form-control @error('harga') is-invalid @enderror" id="harga" name="harga"
-                required value="{{ old('harga', $barang->harga) }}">
+        <div>
+            <label for="harga_display" class="block text-sm font-medium text-gray-700">Harga</label>
+            <div class="relative mt-1 rounded-md shadow-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span class="text-gray-500 sm:text-sm font-bold">IDR</span>
+                </div>
+                
+                <input type="text" 
+                       id="harga_display" 
+                       class="block w-full rounded-md border-gray-300 pl-12 pr-12 focus:border-choco focus:ring-choco sm:text-sm p-2.5 border @error('harga') border-red-500 @enderror" 
+                       placeholder="0"
+                       required
+                       value="{{ old('harga') ? number_format(old('harga'), 0, ',', '.') : number_format($barang->harga, 0, ',', '.') }}">
+                
+                <input type="hidden" name="harga" id="harga_actual" value="{{ old('harga', $barang->harga) }}">
+            </div>
             @error('harga')
-            <div class="invalid-feedback">
-                {{$message}}
-            </div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="kategori_id" class="form-label">Kategori</label>
-            <select class="form-select @error('kategori_id') is-invalid @enderror" id="kategori_id" name="kategori_id" aria-label="Default select example">
-                <option value="" disabled selected>Pilih kategori</option>
+        <div>
+            <label for="kategori_id" class="block text-sm font-medium text-gray-700">Kategori</label>
+            <select id="kategori_id" 
+                    name="kategori_id" 
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-choco focus:ring-choco sm:text-sm p-2.5 border">
+                <option value="" disabled>Pilih kategori</option>
                 @foreach($kategoris as $kategori)
-                    <option value="{{ $kategori->id }}" {{ $kategori->id == old('kategori_id', $barang->kategori_id) ? 'selected' : '' }}>
+                    <option value="{{ $kategori->id }}" 
+                        {{ old('kategori_id', $barang->kategori_id) == $kategori->id ? 'selected' : '' }}>
                         {{ $kategori->nama_kategori }}
                     </option>
                 @endforeach
             </select>
-            
-            @error('kategori_id')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
         </div>
-        
-        <div class="mb-3">
-            <label for="berat_barang" class="form-label">masukan angka berat barang /Gram(G)/slice</label>
-            <input type="text" class="form-control @error('berat_barang') is-invalid @enderror" id="berat_barang" name="berat_barang"
-                required autofocus value="{{ $barang->berat_barang }}">
+
+        <div>
+            <label for="berat_barang" class="block text-sm font-medium text-gray-700">Berat (Gram/Slice)</label>
+            <div class="mt-1">
+                <input type="text" 
+                       id="berat_barang" 
+                       name="berat_barang" 
+                       required 
+                       value="{{ old('berat_barang', $barang->berat_barang) }}"
+                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-choco focus:ring-choco sm:text-sm p-2.5 border @error('berat_barang') border-red-500 @enderror">
+            </div>
             @error('berat_barang')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="image" class="form-label"> Images</label>
-
-            <!-- Menyimpan nilai gambar lama sebagai hidden field -->
-            <input type="hidden" name="oldimage" value="{{ $barang->image }}">
-
-
-            @if($barang->img)
-            <img src="{{ asset('images/' . $barang->img) }}" class="img-preview img-fluid mb-3 col-sm-5 d-block"
-                id="imagePreview">
-            @else
-            <img class="img-preview img-fluid mb-3 col-sm-" id="imagePreview" style="display: none;">
-            @endif
-
-            <!-- Input untuk gambar baru -->
-            <input class="form-control @error('image') is-invalid @enderror" id="img" type="file" name="img"
-                onchange="previewImage()">
-
-            @error('image')
-            <div class="invalid-feedback">
-                {{ $message }}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Post Image (Opsional)</label>
+            
+            <div class="mb-3 flex gap-4 items-end">
+                <div class="relative">
+                    <p class="text-xs text-gray-500 mb-1">Preview:</p>
+                    @if($barang->img)
+                        <img id="imagePreview" src="{{ asset('images/' . $barang->img) }}" class="w-32 h-32 object-cover rounded-lg border border-gray-300 shadow-sm">
+                    @else
+                        <img id="imagePreview" class="hidden w-32 h-32 object-cover rounded-lg border border-gray-300 shadow-sm">
+                        <div id="noImageText" class="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-xs border border-gray-300">No Image</div>
+                    @endif
+                </div>
             </div>
+
+            <input class="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-cream file:text-choco
+                    hover:file:bg-cream_hover
+                    border border-gray-300 rounded-md cursor-pointer bg-white focus:outline-none
+                    @error('img') border-red-500 @enderror" 
+                    id="image" 
+                    type="file" 
+                    name="img" 
+                    onchange="previewImage()">
+            <p class="text-xs text-gray-500 mt-1">*Biarkan kosong jika tidak ingin mengubah gambar.</p>
+            
+            @error('img')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1">Deskripsi</label>
-            <textarea placeholder="" class="form-control" name="deskripsi" id="deskripsi"
-                rows="3">{{ old('deskripsi', $barang->deskripsi) }}</textarea>
+        <div>
+            <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+            <div class="mt-1">
+                <textarea id="deskripsi" 
+                          name="deskripsi" 
+                          rows="4" 
+                          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-choco focus:ring-choco sm:text-sm p-2.5 border">{{ old('deskripsi', $barang->deskripsi) }}</textarea>
+            </div>
         </div>
 
+        <div class="pt-4 flex gap-3">
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-choco hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-choco transition duration-150">
+                Update Data
+            </button>
+            <a href="{{ route('post') }}" class="w-1/3 flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition duration-150">
+                Batal
+            </a>
+        </div>
 
-        <button type="submit" class="btn btn-primary">Submit edit</button>
     </form>
-    </table>
 </div>
 
 <script>
+    // 1. Script Preview Image
     function previewImage() {
-        const image = document.querySelector('#img');
+        const image = document.querySelector('#image');
         const imgPreview = document.querySelector('#imagePreview');
+        const noImageText = document.querySelector('#noImageText');
 
         if (image.files && image.files[0]) {
             const oFReader = new FileReader();
@@ -112,12 +150,35 @@
 
             oFReader.onload = function (oFREvent) {
                 imgPreview.src = oFREvent.target.result;
-            }
+            };
 
-            imgPreview.style.display = 'block';
-        } else {
-            imgPreview.style.display = 'none';
+            imgPreview.classList.remove('hidden');
+            if(noImageText) noImageText.classList.add('hidden');
         }
     }
+
+    // 2. Script Format Rupiah
+    const hargaDisplay = document.getElementById('harga_display');
+    const hargaActual = document.getElementById('harga_actual');
+
+    hargaDisplay.addEventListener('keyup', function(e) {
+        let value = this.value.replace(/[^0-9]/g, '');
+        hargaActual.value = value;
+        this.value = formatRupiah(value);
+    });
+
+    function formatRupiah(angka) {
+        let number_string = angka.toString(),
+            sisa    = number_string.length % 3,
+            rupiah  = number_string.substr(0, sisa),
+            ribuan  = number_string.substr(sisa).match(/\d{3}/g);
+
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        return rupiah;
+    }
 </script>
+
 @endsection

@@ -1,52 +1,94 @@
 @extends('admins.index')
+
 @section('admin')
-<!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
-<h1 class="h2">Dashboard</h1>
-  </div>
 
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-choco">Dashboard</h1>
+        <p class="text-gray-600 mt-1">Ringkasan data toko Anda.</p>
+    </div>
 
-      <h2>barang</h2>
-      <div class="table-responsive small">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              {{-- <th scope="col">#</th> --}}
-              <th scope="col">title</th>
-              <th scope="col">img</th>
-              <th scope="col">deskripsi</th>
-              <th scope="col">harga</th>
-              <th scope="col">jenis/kategori</th>
-              <th scope="col">Gram(G)/slice</th>
+    <div class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 border-l-4 border-choco pl-3">
+            Daftar Kategori
+        </h2>
+        
+        <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-cream">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">
+                            Nama Kategori
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @foreach($kategori as $cat) 
+                    {{-- Note: Saya ubah variabel alias jadi $cat agar tidak bentrok nama variabel --}}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ $cat->nama_kategori }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($barangs as $barang)
-            <tr>
-                {{-- <td>{{ $barang->id }}</td> --}}
-                <td>{{ $barang->title }}</td>
-                <td><img src="{{ asset('images/' . $barang->img) }}" alt="{{ $barang->title }}" width="100"></td>
-                <td>{{ $barang->deskripsi }}</td>
-                <td>{{ $barang->harga }}</td>
-                <td>{{ $barang->kategori->nama_kategori }}</td>
-                <td>{{ $barang->berat_barang }}</td>
+    <div>
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 border-l-4 border-choco pl-3">
+            Daftar Barang
+        </h2>
 
-                
-            </tr>
-        @endforeach
-            
-          </tbody>
-        </table>
-      </div>
-  </div>
+        <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-cream">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">Title</th>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">Image</th>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">Deskripsi</th>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">Harga</th>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">Kategori</th>
+                        <th scope="col" class="px-6 py-3 text-left font-bold text-choco uppercase tracking-wider">Berat (G)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @foreach($barangs as $barang)
+                    <tr class="hover:bg-gray-50 transition-colors even:bg-gray-50/50">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ $barang->title }}
+                        </td>
+                        
+                        <td class="px-6 py-4">
+                            <div class="h-16 w-16 overflow-hidden rounded-md border border-gray-200">
+                                <img src="{{ asset('images/' . $barang->img) }}" 
+                                     alt="{{ $barang->title }}" 
+                                     class="h-full w-full object-cover">
+                            </div>
+                        </td>
 
-<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+                        <td class="px-6 py-4 text-gray-500 max-w-xs truncate">
+                            {{ $barang->deskripsi }}
+                        </td>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script><script src="dashboard.js"></script></body>
+                        <td class="px-6 py-4 text-gray-900 font-semibold whitespace-nowrap">
+                            Rp {{ number_format($barang->harga, 0, ',', '.') }}
+                        </td>
 
-@endsection
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                            <span class="px-2 py-1 bg-cream/50 text-choco rounded-full text-xs font-semibold">
+                                {{ $barang->kategori->nama_kategori }}
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                            {{ $barang->berat_barang }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @endsection

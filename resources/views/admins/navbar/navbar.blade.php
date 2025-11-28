@@ -8,11 +8,18 @@
         </li>   
         <li class="nav-item">
           <a class="nav-link" href="/post">
-            <button class="admin-custom-btn admin-btn-5"><span> insert</span></button>
+            <button class="admin-custom-btn admin-btn-5"><span>toko</span></button>
             {{-- <span data-feather="file"></span> --}}
            
           </a>
         </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{{route('kategori')}} ">
+          <button class="admin-custom-btn admin-btn-5"><span>kategori</span></button>
+          {{-- <span data-feather="file"></span> --}}
+         
+        </a>
+      </li>
         <li class="nav-item">
           <a class="nav-link" href="{{route('cart_admin')}} ">
             <button class="admin-custom-btn admin-btn-5"><span>list cart</span></button>
@@ -20,7 +27,6 @@
            
           </a>
         </li>
-        
         {{-- <li class="nav-item">
           <a class="nav-link" href="#">
             <span data-feather="shopping-cart"></span>
