@@ -30,7 +30,7 @@ class DiskonController extends Controller
         Diskon::create([
             'nama_diskon' => $request->nama_diskon,
             'persentase'  => $request->persentase,
-            'status'      => true // Default aktif
+            'status'      => false 
         ]);
 
         return redirect()->route('diskon.index')->with('success', 'Diskon berhasil dibuat.');
@@ -46,12 +46,27 @@ class DiskonController extends Controller
     }
 
     // Toggle Status (Aktif/Non-Aktif)
-    public function toggleStatus($id)
+   public function toggleStatus($id)
     {
         $diskon = Diskon::findOrFail($id);
-        $diskon->status = !$diskon->status; // Balikkan status
+
+        if ($diskon->status == false) {
+            // KASUS: MAU MENGAKTIFKAN
+            // 1. Matikan (update) semua diskon lain menjadi false
+            Diskon::where('id', '!=', $id)->update(['status' => false]);
+            
+            // 2. Aktifkan diskon yang dipilih
+            $diskon->status = true;
+            $pesan = 'Diskon diaktifkan. Diskon lain otomatis dinonaktifkan.';
+        } else {
+            // KASUS: MAU MENONAKTIFKAN
+            // Langsung matikan saja (boleh tidak ada yang aktif sama sekali)
+            $diskon->status = false;
+            $pesan = 'Diskon dinonaktifkan.';
+        }
+
         $diskon->save();
 
-        return back()->with('success', 'Status diskon diperbarui.');
+        return back()->with('success', $pesan);
     }
 }

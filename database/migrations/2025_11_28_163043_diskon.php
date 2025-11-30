@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_diskon');      // Contoh: "Diskon Lebaran"
             $table->integer('persentase');      // Contoh: 15 (artinya 15%)
-            $table->boolean('status')->default(true); // Aktif (1) atau Tidak (0)
+            $table->boolean('status')->default(0);// Aktif (1) atau Tidak (0)
             $table->timestamps();
         });
     }
