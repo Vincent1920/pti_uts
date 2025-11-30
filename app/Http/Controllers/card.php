@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Barang;
+use App\Models\Diskon;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,14 +25,45 @@ class card extends Controller
      ]);
     }
 
-    public function cart(){
-        $cartItems = CartItem::where('user_id', Auth::id())->get();
-        $totalPrice = $cartItems->sum(function($item) {
-            return $item->total_price;
-        });
-    
-        return view('layouts.cart', compact('cartItems', 'totalPrice'));
+    // App/Http/Controllers/CartController.php
+
+public function cart()
+{
+    // 1. Ambil Data
+    $cartItems = CartItem::where('user_id', Auth::id())->with('barang')->get();
+
+    // 2. Hitung Total Kotor (Tanpa Diskon)
+    $grandTotal = $cartItems->sum(function($item) {
+        return $item->barang->harga * $item->quantity;
+    });
+
+    // 3. Cek Database Diskon
+    $diskon = \App\Models\Diskon::where('status', true)->first(); // Ambil diskon aktif
+
+    // 4. Hitung Potongan
+    if ($diskon) {
+        $namaDiskon = $diskon->nama_diskon;
+        $persenDiskon = $diskon->persentase;
+        $discountAmount = $grandTotal * ($persenDiskon / 100);
+    } else {
+        $namaDiskon = "";
+        $persenDiskon = 0;
+        $discountAmount = 0;
     }
+
+    // 5. Hitung Total Bersih
+    $finalPrice = $grandTotal - $discountAmount;
+// dd($finalPrice);
+    // 6. Kirim ke View
+   return view('layouts.cart', [
+        'cartItems'      => $cartItems,
+        'grandTotal'     => $grandTotal,
+        'discountAmount' => $discountAmount,
+        'namaDiskon'     => $namaDiskon,
+        'persenDiskon'   => $persenDiskon,
+        'finalPrice'     => $finalPrice
+    ]);
+}
     
 
     public function add(Request $request){

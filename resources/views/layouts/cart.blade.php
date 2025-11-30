@@ -2,409 +2,344 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="css/shop/cart.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <title>ChocoScript - Cart</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Delius+Unicase:wght@400;700&family=Kotta+One&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Macondo&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Delius+Unicase:wght@400;700&family=Kotta+One&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Macondo&family=Manuale:ital,wght@0,300..800;1,300..800&family=Margarine&family=Qwigley&family=Rancho&family=Redressed&family=Moulpali&family=Murecho&family=Montaga&display=swap"
         rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manuale:ital,wght@0,300..800;1,300..800&display=swap"
-        rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manuale:ital,wght@0,300..800;1,300..800&family=Margarine&display=swap"
-        rel="stylesheet">
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
-    <title>ChocoScript</title>
-
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
-
-    <link rel="stylesheet" href="css/shop/cart.css">
-</head>
-
-<body>
-    <!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
-    {{-- <script ></script> --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Redressed&display=swap');
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <script>
-        $(document).ready(function () {
-            console.log("jQuery is loaded and ready.");
-
-            var DropDown = function (element) {
-                this.dd = element;
-                this.initEvents();
-            };
-
-            DropDown.prototype = {
-                initEvents: function () {
-                    var self = this;
-
-                    self.dd.on('click', function (event) {
-                        $(this).toggleClass('active');
-                        event.stopPropagation();
-                    });
-
-                    $(document).click(function () {
-                        $('.wrapper-dropdown-3').not(self.dd).removeClass('active');
-                    });
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        choco: '#463126',
+                        choco_light: '#654e42',
+                        cream: '#f3eae5',
+                        gold: '#c88a5b',
+                        alice: '#f0f8ff',
+                    },
+                    fontFamily: {
+                        qwigley: ['Qwigley', 'cursive'],
+                        kotta: ['Kotta One', 'serif'],
+                        manuale: ['Manuale', 'serif'],
+                        margarine: ['Margarine', 'sans-serif'],
+                        rancho: ['Rancho', 'cursive'],
+                        montaga: ['Montaga', 'serif'],
+                    },
+                    animation: {
+                        'slide-down': 'slideDown 0.3s ease-out forwards',
+                        'scroll-text': 'scrollText 10s linear infinite',
+                    },
+                    keyframes: {
+                        slideDown: {
+                            '0%': {
+                                transform: 'translateY(-10px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        scrollText: {
+                            '0%, 100%': {
+                                transform: 'translateY(0)'
+                            },
+                            '25%': {
+                                transform: 'translateY(-50px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-100px)'
+                            },
+                            '75%': {
+                                transform: 'translateY(-50px)'
+                            },
+                        }
+                    }
                 }
-            };
-
-            $(function () {
-                var dd = new DropDown($('#dd2'));
-            });
-        });
+            }
+        }
     </script>
+</head>
 
-    <div class="iklan">
-        <div class="container-iklan">
-            <div id="container-iklan">
-                <div id="container-iklan-text1"> Vegsn Milk Chocolate 20%</div>
-                <div id="container-iklan-text3">Milk Magazine 15%</div>
-                <div>Diskon 40%</div>
-                <div id="container-iklan-text2"> cherry cake 30%</div>
-            </div>
+<body class="bg-white">
+
+    <div class="bg-choco h-12 overflow-hidden relative w-full z-50">
+        <div
+            class="h-full flex flex-col items-center justify-center text-cream font-montaga text-lg animate-scroll-text space-y-4 pt-2">
+            <div>Vegan Milk Chocolate 20%</div>
+            <div>Milk Magazine 15%</div>
+            <div>Diskon Spesial Hari Ini!</div>
+            <div>Cherry Cake 30%</div>
         </div>
     </div>
 
+    <nav
+        class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-sm w-full transition-all duration-500 hover:bg-alice">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
 
-    <hr />
+                <div class="flex-shrink-0">
+                    <a href="/" class="text-5xl font-qwigley text-black hover:text-choco transition">ChocoScript</a>
+                </div>
 
-    <!-- navbar -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <div class="group relative">
+                        <a href="{{ route('shop') }}"
+                            class="text-4xl font-qwigley text-black hover:text-choco transition cursor-pointer">Shop</a>
 
-    <nav class="navbar">
-        <ul>
-            <li class="navbar-li ">
-
-                <a class="navbar-link" href="/"> ChocoScript</a>
-            </li>
-        </ul>
-
-
-        <ul class="navbar1">
-            <li class="navbar-li dropdown">
-
-
-                <a class=" navbar-link dropdown-toggle" href="{{ route('shop') }}">
-                    Shop
-                </a>
-                <ul class="dropdown-menu ">
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{ route('shop') }}">
-                            <div class="navbar-img1">
-                                <img src="../img/shop/Milk_Magazine.png" alt="">
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 mt-0 w-[600px] bg-alice shadow-xl rounded-b-lg overflow-hidden h-0 group-hover:h-auto group-hover:p-6 transition-all duration-500 ease-in-out border-t-2 border-choco opacity-0 group-hover:opacity-100 invisible group-hover:visible z-50">
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="{{ route('shop') }}"
+                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
+                                    <img src="../img/shop/Milk_Magazine.png"
+                                        class="w-20 h-16 object-cover rounded-md group-hover/item:scale-105 transition"
+                                        alt="Milk">
+                                    <h2 class="font-rancho text-2xl text-gray-800">Milk Magazine</h2>
+                                </a>
+                                <a href="{{ route('shop') }}"
+                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
+                                    <img src="../img/shop/Chocolate.png"
+                                        class="w-20 h-16 object-cover rounded-md group-hover/item:scale-105 transition"
+                                        alt="Choco">
+                                    <h2 class="font-rancho text-2xl text-gray-800">Chocolate</h2>
+                                </a>
+                                <a href="{{ route('shop') }}"
+                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
+                                    <img src="../img/shop/delivered_nationwide-removebg-preview.png"
+                                        class="w-20 h-16 object-contain rounded-md group-hover/item:scale-105 transition"
+                                        alt="Delivered">
+                                    <h2 class="font-rancho text-2xl text-gray-800">Delivered</h2>
+                                </a>
+                                <a href="{{ route('shop') }}"
+                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
+                                    <img src="../img/shop/dark_22_piece-removebg-preview.png"
+                                        class="w-20 h-16 object-contain rounded-md group-hover/item:scale-105 transition"
+                                        alt="Dark">
+                                    <h2 class="font-rancho text-2xl text-gray-800">Dark Choco</h2>
+                                </a>
                             </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Milk Magazine
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{ route('shop') }}">
-                            <div class="navbar-img1">
-                                <img src="../img/shop/delivered_nationwide-removebg-preview.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Delivered Nationwide
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{ route('shop') }}">
-                            <div class="navbar-img1">
-                                <img src="../img/shop/Chocolate.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Chocolate
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{ route('shop') }}">
-                            <div class="navbar-img1">
-                                <img src="../img/shop/dark_22_piece-removebg-preview.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Dark Choco
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li>
-
-            <li class="navbar-li dropdown">
-                <a class="navbar-link dropdown-toggle " href="{{route('brand')}}">
-                    Brand
-                </a>
-                <ul class="dropdown-menu ">
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{route('shop')}}">
-                            <div class="navbar-img1">
-                                <img src="../img/brand/Chocolate.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Chocolate
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{route('shop')}}">
-                            <div class="navbar-img1">
-                                <img src="../img/brand/dark_22_piece-removebg-preview.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Dark Choco
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{route('shop')}}">
-                            <div class="navbar-img1">
-                                <img src="../img/brand/Super_cookies.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Super Cookies
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-
-                    <li class="dropdown-item">
-                        <a class="navbar-link1" href="{{route('shop')}}">
-                            <div class="navbar-img1">
-                                <img src="../img/brand/Tongan_vanilla.png" alt="">
-                            </div>
-                            <div class="navbar-text1">
-                                <h2>
-                                    Tongan vanilla
-                                </h2>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-
-        @auth
-        <ul>
-            <li id="dd2" class="navbar_cart wrapper-dropdown-3 navbar-li navbar_cart navbar-link">
-                <p class="dropdown2">{{ auth()->user()->username }}</p>
-                <ul class="dropdown">
-                    <li class="bob_nav">
-                        <a href="{{ route('logout') }}">Logout
-
-                            <svg class="bob_nav-svg" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                fill="#c88a5b" class="logout bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-                            </svg>
-                        </a>
-                    </li>
-                    @if (auth()->user()->role === 'admin')
-                    <li class="bob_nav"><a class="dropdown_a" href="/admin">Admin
-                            <svg class="bob_nav-svg" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                fill="#c88a5b" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
-                                <path
-                                    d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a2 2 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693Q8.844 9.002 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1" />
-                            </svg>
-                        </a></li>
-                        <li class="bob_nav"><a class="dropdown_a" href="{{route('cart')}}">Card
-
-                            <svg class="bob_nav-svg" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#c88a5b" class="bi bi-basket2-fill" viewBox="0 0 16 16">
-                                <path d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1"/>
-                            </svg>
-                        </a>
-                        </li>
-                    @else
-                    <li class="bob_nav"><a class="dropdown_a" href="{{route('cart')}}">Card
-
-                            <svg class="bob_nav-svg" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                fill="#c88a5b" class="bi bi-basket2-fill" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1" />
-                            </svg>
-                        </a>
-                    </li>
-                    @endif
-                    {{-- <li><a href="../page/kategori/drink.html">Drink</a></li> --}}
-                </ul>
-            </li>
-            @else
-            <a class="navbar-bob" href="/login">Login</a>
-        </ul>
-        @endauth
-    </nav>
-
-    <div class="container-cart">
-        <br>
-        <br>
-        <h1 class="container-cart-h1">Keranjang</h1>
-        @if(session('success'))
-        <div class="alert alert-success">
-            <h1 class="container-cart1-h1">
-                {{ session('success') }}
-
-            </h1>
-         
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-        <h1 class="container-cart1-h1">mendapatkan pengiriman gratis untuk pesanan Anda!</h1>
-
-        <br>
-
-        @php
-            $totalHargaSemuaPesanan = 0;
-            $totalPrice = 0;
-            $itemTotalPrices = []; 
-            $itemDiscounts = [];
-        @endphp
-        @foreach($cartItems as $item)
-        <hr class="hr">
-
-        <div class="container-cart1">
-            <div class="container-cart1-2">
-                <img class="container-cart1-2-img" src="{{ asset('images/' . $item->barang->img) }}" alt="">
-            </div>
-            <div class="container-cart1-3">
-                <p class="container-cart1-3-titile">{{$item->barang->title}}</p>
-                <p class="container-cart1-3-harga">IDR {{$item->barang->harga}} K</p>
-                <p class="container-cart1-3-berat_barang">1 BUAH /{{$item->barang->berat_barang}}g</p>
-
-            </div>
-            <div class="container-cart1-4">
-                <form action="{{ route('cart.update', $item->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <div class="  input-group">
-                        <button type="submit" name="action" value="decrease" class="btn-">-</button>
-                        <input type="text" name="quantity" value="{{ $item->quantity }}" class="cart_input-group "
-                            readonly>
-                        <button type="submit" name="action" value="increase" class="btn">+</button>
+                        </div>
                     </div>
-                </form>
-                <form action="{{ route('cart.remove', $item->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    {{-- <button class="cart_remove" type="submit" class="btn btn-danger">Remove</button> --}}
-                    <button class="custom-btn btn-8" type="submit" ><span>Remove</span></button>
-                </form>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    @auth
+                    <!-- Tambahkan ID 'dropdown-container' untuk referensi JS -->
+                    <div id="dropdown-container" class="relative z-50">
+
+                        <!-- Tambahkan ID 'dropdown-btn' dan event onclick -->
+                        <button id="dropdown-btn" onclick="toggleDropdown()"
+                            class="text-3xl font-qwigley text-black hover:text-gold transition flex items-center gap-2 focus:outline-none">
+                            {{ auth()->user()->username }}
+
+                            <!-- ID 'dropdown-icon' untuk animasi panah -->
+                            <i id="dropdown-icon"
+                                class="bi bi-chevron-down text-sm pt-1 transition-transform duration-300"></i>
+                        </button>
+
+                        <!-- Hapus 'group-hover:block', biarkan default 'hidden' -->
+                        <!-- Tambahkan ID 'dropdown-menu' -->
+                        <div id="dropdown-menu"
+                            class="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-md overflow-hidden hidden border border-gray-100 origin-top-right">
+
+                            @if (auth()->user()->role === 'admin')
+                            <a href="/admin"
+                                class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
+                                <i class="bi bi-person-lock mr-3 text-gold"></i> Admin Panel
+                            </a>
+                            @endif
+
+                            <a href="{{ route('cart') }}"
+                                class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
+                                <i class="bi bi-basket2-fill mr-3 text-gold"></i> Keranjang
+                            </a>
+
+                            <a href="{{ route('logout') }}"
+                                class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-t border-gray-100 flex items-center">
+                                <i class="bi bi-box-arrow-right mr-3 text-red-400"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                    @else
+                    <a href="/login" class="text-4xl font-qwigley text-black hover:text-gold transition">Login</a>
+                    @endauth
+                </div>
             </div>
-            <div class="container-cart1-5">
-                @php
-                $totalPrice = 0;
-                @endphp
-                @php
-                $itemTotalPrice = $item->barang->harga * $item->quantity;
-                if ($item->quantity > 6) {
-                $discount = 0.15;
-                } else {
-                $discount = 0.00;
-                }
+    </nav>
+    <div class="max-w-6xl mx-auto px-4 py-10 min-h-screen">
 
-                $itemDiscount = $itemTotalPrice * $discount;
-                $finalItemPrice = $itemTotalPrice - $itemDiscount;
+        <h1 class="text-4xl font-kotta text-center text-gray-800 mb-2">Keranjang Belanja</h1>
+        <p class="text-center text-gray-500 font-manuale mb-8">Dapatkan pengiriman gratis untuk pesanan Anda!</p>
 
-                $totalPrice += $finalItemPrice;
+        @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-sm" role="alert">
+            <p class="font-bold">Berhasil!</p>
+            <p>{{ session('success') }}</p>
+        </div>
+        @endif
+        @if(session('error'))
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-sm" role="alert">
+            <p class="font-bold">Error!</p>
+            <p>{{ session('error') }}</p>
+        </div>
+        @endif
 
-                $itemTotalPrices[] = $itemTotalPrice;
-                $itemDiscounts[] = $itemDiscount;
-                @endphp
-                <p class="container-cart1-5-P">{{ number_format($itemTotalPrice, 2) }} K</p>
+        <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden mb-8">
+
+            @if($cartItems->isEmpty())
+            <div class="p-10 text-center text-gray-500 font-manuale text-xl">
+                <i class="bi bi-cart-x text-6xl mb-4 block text-gray-300"></i>
+                Keranjang Anda masih kosong.
             </div>
+            @else
+            @foreach($cartItems as $item)
+            <div
+                class="flex flex-col md:flex-row items-center p-6 border-b border-gray-100 hover:bg-gray-50 transition">
+
+                <div class="w-full md:w-32 h-32 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mb-4 md:mb-0">
+                    <img src="{{ asset('images/' . $item->barang->img) }}" alt="{{ $item->barang->title }}"
+                        class="w-full h-full object-cover">
+                </div>
+
+                <div class="flex-1 md:ml-6 text-center md:text-left w-full">
+                    <h3 class="text-2xl font-kotta text-gray-900">{{ $item->barang->title }}</h3>
+                    <p class="text-lg font-manuale text-gray-600">IDR
+                        {{ number_format($item->barang->harga, 0, ',', '.') }}</p>
+                    <p class="text-sm font-margarine text-gray-400 mt-1 uppercase">1 Buah /
+                        {{ $item->barang->berat_barang }}g</p>
+                </div>
+
+                <div
+                    class="flex flex-col items-center justify-center space-y-3 md:space-y-0 md:space-x-6 md:flex-row mt-4 md:mt-0">
+
+                    <form action="{{ route('cart.update', $item->id) }}" method="POST" class="flex items-center">
+                        @csrf
+                        @method('PATCH')
+                        <div class="flex items-center border border-gray-300 rounded-md bg-white">
+                            <button type="submit" name="action" value="decrease"
+                                class="px-3 py-1 text-gray-600 hover:bg-gray-100 hover:text-choco transition">-</button>
+                            <input type="text" name="quantity" value="{{ $item->quantity }}"
+                                class="w-12 text-center border-x border-gray-300 py-1 text-gray-800 font-bold focus:outline-none"
+                                readonly>
+                            <button type="submit" name="action" value="increase"
+                                class="px-3 py-1 text-gray-600 hover:bg-gray-100 hover:text-choco transition">+</button>
+                        </div>
+                    </form>
+
+                    <form action="{{ route('cart.remove', $item->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="text-red-500 hover:text-red-700 font-bold text-sm uppercase tracking-wider flex items-center transition group">
+                            <i class="bi bi-trash mr-1 group-hover:scale-110 transition"></i> Remove
+                        </button>
+                    </form>
+                </div>
+
+                <div class="w-full md:w-32 text-center md:text-right mt-4 md:mt-0">
+                    @php
+                    $subtotalItem = $item->barang->harga * $item->quantity;
+                    @endphp
+                    <p class="text-xl font-bold text-choco">
+                        {{ number_format($subtotalItem, 0, ',', '.') }}
+                    </p>
+                </div>
+
+            </div>
+            @endforeach
+            @endif
         </div>
 
-        @endforeach
-        <hr class="hr">
-        <div class="container-cart2">
-            <div class="container-cart2-1">
+        @if(!$cartItems->isEmpty())
+        <div class="flex justify-end mt-8">
+            <div class="w-full md:w-1/2 lg:w-1/3 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h3 class="text-xl font-kotta border-b border-gray-200 pb-2 mb-4">Ringkasan Pesanan</h3>
 
-            </div>
-            <div class="container-cart2-1">
-                @php
-                $totalOriginalPrice = array_sum($itemTotalPrices);
-                $totalDiscount = array_sum($itemDiscounts);
-                @endphp
-                <table class="table">
-                    <tr>
-                        <td>
-                            Harga sebelum diskon 
-                        </td>
-                        <td align="center" width="10px">
-                            :
-                        </td>
-                        <td>
-                           IDR {{ number_format($totalOriginalPrice, 2, ',', '.') }} K
+                <div class="flex justify-between items-center mb-2 font-manuale text-gray-600">
+                    <span>Total Harga</span>
+                    <span>IDR {{ number_format($grandTotal, 0, ',', '.') }} </span>
+                </div>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Diskon 15%
-                        </td>
-                        <td align="center" width="10px">
-                            :
-                        </td>
-                        <td>
-                           IDR  {{ number_format($totalDiscount, 2, ',', '.') }} K
+                <div class="flex justify-between items-center mb-4 font-manuale">
+                    <span class="{{ $discountAmount > 0 ? 'text-green-600 font-bold' : 'text-gray-400' }}">
+                        Diskon
+                        @if($discountAmount > 0)
+                        <span class="text-xs bg-green-100 px-2 py-0.5 rounded ml-1">
+                            {{ $namaDiskon }} {{ $persenDiskon }}%
+                        </span>
+                        @endif
+                    </span>
+                    <span class="{{ $discountAmount > 0 ? 'text-green-600' : 'text-gray-400' }}">
+                        - IDR {{ number_format($discountAmount, 0, ',', '.') }}
+                    </span>
+                </div>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Seluruh
-                        </td>
-                        <td align="center" width="10px">
-                            :
-                        </td>
-                        <td>
-                            IDR {{ number_format($totalPrice, 2, ',', '.') }} K
+                <div class="border-t border-gray-300 pt-4 flex justify-between items-center">
+                    <span class="text-2xl font-kotta text-gray-800">Total Bayar</span>
+                    <span class="text-2xl font-bold text-choco">
+                        {{ number_format($discountAmount, 0, ',', '.') }}
+                    </span>
+                </div>
 
-                        </td>
-                    </tr>
-                </table>
+                <button
+                    class="w-full mt-6 bg-choco hover:bg-choco_light text-white font-bold py-3 px-4 rounded shadow-md transition transform hover:-translate-y-0.5">
+                    Checkout Sekarang
+                </button>
             </div>
         </div>
+        @endif
+
     </div>
+    <footer class="bg-choco text-cream py-8 mt-12">
+        <div class="text-center font-qwigley text-6xl">ChocoScript</div>
+        <div class="text-center mt-4 text-sm font-manuale opacity-70">&copy; {{ date('Y') }} All Rights Reserved.</div>
+    </footer>
 
 </body>
+
+<!-- Script Khusus untuk Dropdown ini -->
+<script>
+    function toggleDropdown() {
+        const menu = document.getElementById('dropdown-menu');
+        const icon = document.getElementById('dropdown-icon');
+
+        // Toggle visibility menu
+        if (menu.classList.contains('hidden')) {
+            // Buka Menu
+            menu.classList.remove('hidden');
+            menu.classList.add('animate-slide-down'); // Efek slide
+            icon.classList.add('rotate-180'); // Putar panah ke atas
+        } else {
+            // Tutup Menu
+            menu.classList.add('hidden');
+            menu.classList.remove('animate-slide-down');
+            icon.classList.remove('rotate-180'); // Balikkan panah
+        }
+    }
+
+    // Menutup dropdown jika user klik di luar area dropdown
+    window.addEventListener('click', function (e) {
+        const container = document.getElementById('dropdown-container');
+        const menu = document.getElementById('dropdown-menu');
+        const icon = document.getElementById('dropdown-icon');
+
+        if (!container.contains(e.target)) {
+            menu.classList.add('hidden');
+            menu.classList.remove('animate-slide-down');
+            icon.classList.remove('rotate-180');
+        }
+    });
+</script>
 
 </html>
