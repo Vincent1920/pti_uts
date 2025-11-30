@@ -13,10 +13,11 @@ use App\Http\Controllers\controller_shop;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\controller_login;
 use App\Http\Controllers\DiskonController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ControllerKategori;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RegisterController;
-
+use App\Http\Controllers\AdminTransactionController;
 
 Route::get('/', [index::class, 'index'])->name('home');
 Route::get('/brand', [index::class, 'brand'])->name('brand');
@@ -64,15 +65,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/diskon/{id}', [DiskonController::class, 'destroy'])->name('diskon.destroy');
     Route::post('/diskon/{id}/status', [DiskonController::class, 'toggleStatus'])->name('diskon.status');
 
+    // Update Status Transaksi
+    Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('admin.transactions.index');
+    Route::patch('/transactions/{id}/status', [AdminTransactionController::class, 'updateStatus'])->name('admin.transactions.updateStatus');
     
 });
-// Route::prefix('admin')->group(function () {
-//     Route::get('/diskon', [DiskonController::class, 'index'])->name('diskon.index');
-//     Route::get('/diskon/create', [DiskonController::class, 'create'])->name('diskon.create');
-//     Route::post('/diskon', [DiskonController::class, 'store'])->name('diskon.store');
-//     Route::delete('/diskon/{id}', [DiskonController::class, 'destroy'])->name('diskon.destroy');
-//     Route::post('/diskon/{id}/status', [DiskonController::class, 'toggleStatus'])->name('diskon.status');
-// });
+
 
 Route::get('/learn',[index::class,'learn'])->name('learn');
 Route::get('/kategori/{kategori_id}', [controller_shop::class, 'show'])->name('kategori.show');
@@ -87,3 +85,15 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('forgot_password',[controller_login::class,'forgot_password'])->name('forgot_password');
     Route::get('forgot-password/{token}', [controller_login::class, 'forgot_password']);
+
+
+
+Route::middleware(['auth'])->group(function () {
+    // Route untuk Checkout
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    
+    // Route untuk Order List (History)
+    // Pastikan ->name('orders.index') ada disini
+    Route::get('/orders', [CheckoutController::class, 'history'])->name('orders.index');
+});

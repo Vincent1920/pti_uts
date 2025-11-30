@@ -49,8 +49,8 @@
     <div class="container-ke2">
         <div class="container_ke2-card">
             <div class="container_ke2-card1">
+                            <img src="../img/navbar/Chocolate.png" alt="">
 
-                <img src="img/shop/baratti_milano-removebg-preview.png" alt="">
             </div>
             <br />
             <b>
@@ -61,7 +61,8 @@
         </div>
         <div class="container_ke2-card">
             <div class="container_ke2-card1 container_ke2-card2 ">
-                <img src="img/shop/dark_22_piece-removebg-preview.png" alt="">
+                                 <img src="../img/navbar/dark_22.png" alt="">
+
             </div>
             <br />
             <b>
@@ -74,8 +75,8 @@
             <a href="">
 
                 <div class="container_ke2-card3">
+                                <img src="../img/navbar/Tongan_vanilla.png" alt="">
 
-                    <img src="img/shop/Milk_Chocolate _Single_Bar.png" alt="">
                 </div>
             </a>
             <br />

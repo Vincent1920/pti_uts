@@ -1,10 +1,4 @@
-    <!-- 
-        IF-8 
-    Abdul Malik Febrian Zulkifli (10123308)
-    Nadzla Khoerunnisa Misbah(10123285)
-    vincent luhulima  (10123309)
-     -->
-    <div class="iklan">
+<div class="iklan">
         <div class="container-iklan">
             <div id="container-iklan">
                 <div id="container-iklan-text1"> Vegsn Milk Chocolate 20%</div>
@@ -38,7 +32,7 @@
                     <li class="dropdown-item">
                         <a class="navbar-link1" href="{{ route('shop') }}">
                             <div class="navbar-img1">
-                            <img src="../img/brand/Tongan_vanilla.png" alt="">
+                            <img src="../img/navbar/Chocolate.png" alt="">
                             </div>
                             <div class="navbar-text1">
                                 <h2>
@@ -50,7 +44,7 @@
                     <li class="dropdown-item">
                         <a class="navbar-link1" href="{{ route('shop') }}">
                             <div class="navbar-img1">
-                                 <img src="../img/brand/Tongan_vanilla.png" alt="">
+                                 <img src="../img/navbar/dark_22.png" alt="">
                             </div>
                             <div class="navbar-text1">
                                 <h2>
@@ -63,7 +57,7 @@
                     <li class="dropdown-item">
                         <a class="navbar-link1" href="{{ route('shop') }}">
                             <div class="navbar-img1">
-                                <img src="../img/brand/dark_22_piece-removebg-preview.png" alt="">
+                                <img src="../img/navbar/Tongan_vanilla.png" alt="">
                             </div>
                             <div class="navbar-text1">
                                 <h2>
@@ -76,7 +70,7 @@
                     <li class="dropdown-item">
                         <a class="navbar-link1" href="{{ route('shop') }}">
                             <div class="navbar-img1">
-                                <img src="../img/brand/Chocolate.png" alt="">
+                                <img src="../img/navbar/Super_cookies.png" alt="">
                             </div>
                             <div class="navbar-text1">
                                 <h2>

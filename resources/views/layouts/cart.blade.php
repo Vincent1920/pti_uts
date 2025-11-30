@@ -323,10 +323,13 @@
                     </span>
                 </div>
 
-                <button
+                <a href="{{route("checkout.index")}}">
+
+                    <button
                     class="w-full mt-6 bg-choco hover:bg-choco_light text-white font-bold py-3 px-4 rounded shadow-md transition transform hover:-translate-y-0.5">
                     Checkout Sekarang
                 </button>
+            </a>
             </div>
         </div>
         @endif
