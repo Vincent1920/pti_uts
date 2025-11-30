@@ -31,8 +31,6 @@
 
         <ul class="navbar1">
             <li class="navbar-li dropdown">
-
-
                 <a class=" navbar-link dropdown-toggle" href="{{ route('shop') }}">
                     Shop
                 </a>

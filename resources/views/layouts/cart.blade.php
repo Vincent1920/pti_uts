@@ -17,71 +17,82 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        choco: '#463126',
-                        choco_light: '#654e42',
-                        cream: '#f3eae5',
-                        gold: '#c88a5b',
-                        alice: '#f0f8ff',
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    choco: '#463126',
+                    choco_light: '#654e42',
+                    cream: '#f3eae5',
+                    gold: '#c88a5b',
+                    alice: '#f0f8ff',
+                },
+                fontFamily: {
+                    qwigley: ['Qwigley', 'cursive'],
+                    kotta: ['Kotta One', 'serif'],
+                    manuale: ['Manuale', 'serif'],
+                    margarine: ['Margarine', 'sans-serif'],
+                    rancho: ['Rancho', 'cursive'],
+                    montaga: ['Montaga', 'serif'],
+                },
+                animation: {
+                    'slide-down': 'slideDown 0.3s ease-out forwards',
+                    // Ubah durasi jadi 15s atau 20s agar tidak terlalu cepat karena itemnya banyak
+                    'scroll-text': 'scrollText 20s cubic-bezier(0.4, 0, 0.2, 1) infinite', 
+                },
+                keyframes: {
+                    slideDown: {
+                        '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                        '100%': { transform: 'translateY(0)', opacity: '1' },
                     },
-                    fontFamily: {
-                        qwigley: ['Qwigley', 'cursive'],
-                        kotta: ['Kotta One', 'serif'],
-                        manuale: ['Manuale', 'serif'],
-                        margarine: ['Margarine', 'sans-serif'],
-                        rancho: ['Rancho', 'cursive'],
-                        montaga: ['Montaga', 'serif'],
-                    },
-                    animation: {
-                        'slide-down': 'slideDown 0.3s ease-out forwards',
-                        'scroll-text': 'scrollText 10s linear infinite',
-                    },
-                    keyframes: {
-                        slideDown: {
-                            '0%': {
-                                transform: 'translateY(-10px)',
-                                opacity: '0'
-                            },
-                            '100%': {
-                                transform: 'translateY(0)',
-                                opacity: '1'
-                            },
-                        },
-                        scrollText: {
-                            '0%, 100%': {
-                                transform: 'translateY(0)'
-                            },
-                            '25%': {
-                                transform: 'translateY(-50px)'
-                            },
-                            '50%': {
-                                transform: 'translateY(-100px)'
-                            },
-                            '75%': {
-                                transform: 'translateY(-50px)'
-                            },
-                        }
+                    // INI BAGIAN YANG DIPERBAIKI UNTUK 6 ITEM
+                    scrollText: {
+                        '0%, 15%':   { transform: 'translateY(0)' },        // Item 1
+                        '16%, 32%':  { transform: 'translateY(-50px)' },    // Item 2
+                        '33%, 49%':  { transform: 'translateY(-100px)' },   // Item 3
+                        '50%, 66%':  { transform: 'translateY(-150px)' },   // Item 4
+                        '67%, 83%':  { transform: 'translateY(-200px)' },   // Item 5
+                        '84%, 100%': { transform: 'translateY(-250px)' },   // Item 6
                     }
                 }
             }
         }
-    </script>
+    }
+</script>
 </head>
 
 <body class="bg-white">
 
-    <div class="bg-choco h-12 overflow-hidden relative w-full z-50">
-        <div
-            class="h-full flex flex-col items-center justify-center text-cream font-montaga text-lg animate-scroll-text space-y-4 pt-2">
-            <div>Vegan Milk Chocolate 20%</div>
-            <div>Milk Magazine 15%</div>
-            <div>Diskon Spesial Hari Ini!</div>
-            <div>Cherry Cake 30%</div>
+   <div class="bg-choco h-12 overflow-hidden relative w-full z-50">
+    
+    <div id="ticker-content" class="absolute w-full top-0 left-0">
+        
+        <div class="h-12 flex items-center justify-center text-cream font-montaga text-lg">
+            Vegan Milk Chocolate 20%
         </div>
-    </div>
+        
+        <div class="h-12 flex items-center justify-center text-cream font-montaga text-lg">
+            Milk Magazine 15%
+        </div>
+        
+        <div class="h-12 flex items-center justify-center text-cream font-montaga text-lg">
+            Milk Magazine 1%
+        </div>
+        
+        <div class="h-12 flex items-center justify-center text-cream font-montaga text-lg">
+            Milk Magazine 5%
+        </div>
+
+        <div class="h-12 flex items-center justify-center text-cream font-montaga text-lg">
+            Diskon Spesial Hari Ini!
+        </div>
+
+        <div class="h-12 flex items-center justify-center text-cream font-montaga text-lg">
+            Cherry Cake 30%
+        </div>
+
+        </div>
+</div>
 
     <nav
         class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-sm w-full transition-all duration-500 hover:bg-alice">
@@ -90,47 +101,66 @@
 
                 <div class="flex-shrink-0">
                     <a href="/" class="text-5xl font-qwigley text-black hover:text-choco transition">ChocoScript</a>
+
                 </div>
 
-                <div class="hidden md:flex space-x-8 items-center">
-                    <div class="group relative">
-                        <a href="{{ route('shop') }}"
-                            class="text-4xl font-qwigley text-black hover:text-choco transition cursor-pointer">Shop</a>
+                <div class="hidden md:flex space-x-8 items-center h-full">
 
-                        <div
-                            class="absolute left-1/2 transform -translate-x-1/2 mt-0 w-[600px] bg-alice shadow-xl rounded-b-lg overflow-hidden h-0 group-hover:h-auto group-hover:p-6 transition-all duration-500 ease-in-out border-t-2 border-choco opacity-0 group-hover:opacity-100 invisible group-hover:visible z-50">
-                            <div class="grid grid-cols-2 gap-4">
-                                <a href="{{ route('shop') }}"
-                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
-                                    <img src="../img/shop/Milk_Magazine.png"
-                                        class="w-20 h-16 object-cover rounded-md group-hover/item:scale-105 transition"
-                                        alt="Milk">
-                                    <h2 class="font-rancho text-2xl text-gray-800">Milk Magazine</h2>
-                                </a>
-                                <a href="{{ route('shop') }}"
-                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
-                                    <img src="../img/shop/Chocolate.png"
-                                        class="w-20 h-16 object-cover rounded-md group-hover/item:scale-105 transition"
-                                        alt="Choco">
-                                    <h2 class="font-rancho text-2xl text-gray-800">Chocolate</h2>
-                                </a>
-                                <a href="{{ route('shop') }}"
-                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
-                                    <img src="../img/shop/delivered_nationwide-removebg-preview.png"
-                                        class="w-20 h-16 object-contain rounded-md group-hover/item:scale-105 transition"
-                                        alt="Delivered">
-                                    <h2 class="font-rancho text-2xl text-gray-800">Delivered</h2>
-                                </a>
-                                <a href="{{ route('shop') }}"
-                                    class="flex items-center space-x-4 p-2 hover:bg-white rounded-lg transition group/item">
-                                    <img src="../img/shop/dark_22_piece-removebg-preview.png"
-                                        class="w-20 h-16 object-contain rounded-md group-hover/item:scale-105 transition"
-                                        alt="Dark">
-                                    <h2 class="font-rancho text-2xl text-gray-800">Dark Choco</h2>
-                                </a>
+                    <div class="group h-full flex items-center">
+
+   <a href="{{ route('shop') }}" 
+   class="h-full flex items-center px-4 transition cursor-pointer relative z-50">
+   
+   <span class="relative text-4xl font-qwigley text-black group-hover:text-choco transition-colors duration-300">
+       Shop
+       
+       <span class="absolute -bottom-2 left-0 w-full h-[2px] bg-choco transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-right group-hover:origin-left"></span>
+   </span>
+</a>
+                        <div class="fixed left-0 top-20 w-full bg-alice shadow-xl overflow-hidden 
+                                h-0 group-hover:h-auto 
+                                transition-all duration-300 ease-in-out 
+                                border-t-2 border-choco 
+                                opacity-0 group-hover:opacity-100 
+                                invisible group-hover:visible 
+                                z-40">
+
+                            <div class="max-w-7xl mx-auto p-8">
+                                <div class="grid grid-cols-4 gap-8">
+
+                                    <a href="{{ route('shop') }}"
+                                        class="flex flex-col items-center text-center space-y-2 p-7 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
+                                        <img src="../img/brand/Tongan_vanilla.png"
+                                            class="w-48 h-32 object-cover rounded-md shadow-sm" alt="Milk">
+                                        <h2 class="font-rancho text-3xl text-gray-800 pt-2">Milk Magazine</h2>
+                                    </a>
+
+                                    <a href="{{ route('shop') }}"
+                                        class="flex flex-col items-center text-center space-y-2 p-4 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
+                                        <img src="../img/brand/Tongan_vanilla.png"
+                                            class="w-48 h-32 object-cover rounded-md shadow-sm" alt="Delivered">
+                                        <h2 class="font-rancho text-3xl text-gray-800 pt-2">Delivered Nationwide</h2>
+                                    </a>
+
+                                    <a href="{{ route('shop') }}"
+                                        class="flex flex-col items-center text-center space-y-2 p-4 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
+                                        <img src="../img/brand/dark_22_piece-removebg-preview.png"
+                                            class="w-48 h-32 object-contain rounded-md" alt="Chocolate">
+                                        <h2 class="font-rancho text-3xl text-gray-800 pt-2">Chocolate</h2>
+                                    </a>
+
+                                    <a href="{{ route('shop') }}"
+                                        class="flex flex-col items-center text-center space-y-2 p-4 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
+                                        <img src="../img/brand/Chocolate.png"
+                                            class="w-48 h-32 object-cover rounded-md shadow-sm" alt="Dark Choco">
+                                        <h2 class="font-rancho text-3xl text-gray-800 pt-2">Dark Choco</h2>
+                                    </a>
+
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="flex items-center space-x-6">
@@ -177,6 +207,7 @@
                 </div>
             </div>
     </nav>
+
     <div class="max-w-6xl mx-auto px-4 py-10 min-h-screen">
 
         <h1 class="text-4xl font-kotta text-center text-gray-800 mb-2">Keranjang Belanja</h1>
@@ -288,7 +319,7 @@
                 <div class="border-t border-gray-300 pt-4 flex justify-between items-center">
                     <span class="text-2xl font-kotta text-gray-800">Total Bayar</span>
                     <span class="text-2xl font-bold text-choco">
-                        {{ number_format($discountAmount, 0, ',', '.') }}
+                        {{ number_format($finalPrice, 0, ',', '.') }}
                     </span>
                 </div>
 
@@ -307,6 +338,60 @@
     </footer>
 
 </body>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ticker = document.getElementById('ticker-content');
+        const items = ticker.children;
+        const itemCount = items.length;
+        
+        // KONFIGURASI
+        const itemHeight = 48; // Sesuai h-12 (12 * 4px = 48px)
+        const durationPerItem = 3; // Detik per item (bisa diubah)
+        
+        if(itemCount > 0) {
+            // 1. Clone item pertama dan taruh di paling bawah agar looping mulus (Infinity Loop)
+            const firstItemClone = items[0].cloneNode(true);
+            ticker.appendChild(firstItemClone);
+
+            // 2. Hitung total durasi animasi
+            const totalCount = itemCount + 1; // +1 karena ada clone
+            const totalDuration = itemCount * durationPerItem;
+
+            // 3. Buat Keyframes CSS secara Dinamis
+            let keyframes = `@keyframes dynamicScroll {`;
+            
+            const percentageStep = 100 / itemCount; 
+            
+            for (let i = 0; i < itemCount; i++) {
+                const startPercent = i * percentageStep;
+                const endPercent = startPercent + (percentageStep * 0.85); // 85% waktu diam
+                const nextPercent = (i + 1) * percentageStep; // 15% waktu jalan
+
+                const position = -(i * itemHeight);
+
+                // Tahap Diam (Pause)
+                keyframes += `
+                    ${startPercent}% { transform: translateY(${position}px); }
+                    ${endPercent}% { transform: translateY(${position}px); }
+                `;
+            }
+
+            // Tahap Terakhir (Geser ke Clone untuk efek mulus)
+            keyframes += `100% { transform: translateY(-${itemCount * itemHeight}px); }`;
+            keyframes += `}`;
+
+            // 4. Inject CSS ke dalam halaman
+            const styleSheet = document.createElement("style");
+            styleSheet.innerText = keyframes;
+            document.head.appendChild(styleSheet);
+
+            // 5. Terapkan animasi ke elemen
+            ticker.style.animation = `dynamicScroll ${totalDuration}s cubic-bezier(0.4, 0, 0.2, 1) infinite`;
+        }
+    });
+</script>
 
 <!-- Script Khusus untuk Dropdown ini -->
 <script>
