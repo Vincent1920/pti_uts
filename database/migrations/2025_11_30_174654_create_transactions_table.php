@@ -28,7 +28,7 @@ Schema::create('transactions', function (Blueprint $table) {
     $table->string('city');
     $table->string('postal_code');
     $table->string('country')->default('Indonesia');
-    $table->string('status')->default('unpaid')->change();
+    $table->string('status');
     $table->string('payment_method')->nullable();
     
     $table->timestamps();

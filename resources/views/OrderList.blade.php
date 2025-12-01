@@ -77,38 +77,47 @@
         <span class="text-gray-500">{{ $order->created_at->format('d M Y') }}</span>
     </div>
     
-    @php
-        // Default (Unpaid / COD)
-        $statusColor = 'bg-gray-100 text-gray-600';
-        $statusLabel = '(COD)';
+   @php
+    // Default Fallback (Jaga-jaga jika status tidak dikenali)
+    $statusColor = 'bg-gray-100 text-gray-500';
+    $statusLabel = 'Unknown Status';
 
-        if ($order->status == 'pending') {
-            // STATUS BARU DIBAYAR (Menunggu Konfirmasi)
-            $statusColor = 'bg-orange-100 text-orange-800';
-            $statusLabel = 'Baru Dibayar / Menunggu Konfirmasi';
-        } 
-        elseif ($order->status == 'paid') {
-            // Sudah Dikonfirmasi Admin / Lunas
-            $statusColor = 'bg-blue-100 text-blue-800';
-            $statusLabel = 'Lunas / Diproses';
-        } 
-        elseif ($order->status == 'shipping') {
-            $statusColor = 'bg-purple-100 text-purple-800';
-            $statusLabel = 'Dikirim';
-        } 
-        elseif ($order->status == 'completed') {
-            $statusColor = 'bg-green-100 text-green-800';
-            $statusLabel = 'Selesai';
-        } 
-        elseif ($order->status == 'cancelled') {
-            $statusColor = 'bg-red-100 text-red-800';
-            $statusLabel = 'Dibatalkan';
-        }
-    @endphp
+    // 1. UNPAID (Belum Bayar / COD) - Sesuai Admin value="unpaid"
+    if ($order->status == 'unpaid') {
+        $statusColor = 'bg-gray-200 text-gray-700';
+        // Cek metode bayar biar labelnya pinter
+        $statusLabel = ($order->payment_method == 'cod') ? 'COD (Bayar Ditempat)' : 'Belum Dibayar';
+    } 
+    // 2. PENDING - Sesuai Admin value="pending"
+    elseif ($order->status == 'pending') {
+        $statusColor = 'bg-orange-100 text-orange-700';
+        $statusLabel = 'Menunggu Konfirmasi Admin';
+    } 
+    // 3. PAID - Sesuai Admin value="paid"
+    elseif ($order->status == 'paid') {
+        $statusColor = 'bg-blue-100 text-blue-700';
+        $statusLabel = 'Lunas / Sedang Diproses';
+    } 
+    // 4. SHIPPING - Sesuai Admin value="shipping"
+    elseif ($order->status == 'shipping') {
+        $statusColor = 'bg-purple-100 text-purple-700';
+        $statusLabel = 'Sedang Dikirim';
+    } 
+    // 5. COMPLETED - Sesuai Admin value="completed"
+    elseif ($order->status == 'completed') {
+        $statusColor = 'bg-green-100 text-green-700';
+        $statusLabel = 'Selesai';
+    } 
+    // 6. CANCELLED - Sesuai Admin value="cancelled"
+    elseif ($order->status == 'cancelled') {
+        $statusColor = 'bg-red-100 text-red-700';
+        $statusLabel = 'Dibatalkan';
+    }
+@endphp
 
-    <span class="px-2 py-0.5 rounded text-xs font-bold {{ $statusColor }}">
-        {{ $statusLabel }}
-    </span>
+<span class="px-3 py-1 rounded-full text-xs font-bold {{ $statusColor }}">
+    {{ $statusLabel }}
+</span>
     
     <span class="text-gray-400 text-xs sm:ml-auto">{{ $order->invoice_code }}</span>
 </div>
@@ -139,7 +148,7 @@
                                 {{ $firstItem->product_name }}
                             </h3>
                             <p class="text-xs text-gray-500 mt-1">
-                                {{ $firstItem->quantity }} barang x IDR {{ number_format($firstItem->price, 0, ',', '.') }} K
+                                {{ $firstItem->quantity }} barang x IDR {{ number_format($firstItem->price, 0, ',', '.') }} 
                             </p>
                             
                             @if($order->items->count() > 1)
@@ -149,14 +158,14 @@
 
                         <div class="hidden sm:block text-right border-l pl-4 border-gray-200 min-w-[120px]">
                             <p class="text-xs text-gray-500 mb-1">Total Belanja</p>
-                            <p class="font-bold text-choco">IDR {{ number_format($order->grand_total, 0, ',', '.') }} K</p>
+                            <p class="font-bold text-choco">IDR {{ number_format($order->grand_total, 0, ',', '.') }} </p>
                         </div>
                     </div>
 
                     <div class="mt-4 flex flex-col sm:flex-row justify-between items-end sm:items-center gap-4">
                         <div class="sm:hidden w-full flex justify-between items-center">
                             <p class="text-sm text-gray-500">Total Belanja</p>
-                            <p class="font-bold text-choco">IDR {{ number_format($order->grand_total, 0, ',', '.') }} K</p>
+                            <p class="font-bold text-choco">IDR {{ number_format($order->grand_total, 0, ',', '.') }}</p>
                         </div>
 
                         <div class="flex gap-2 w-full sm:w-auto justify-end">    

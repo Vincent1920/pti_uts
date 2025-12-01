@@ -271,6 +271,44 @@
         }
     }
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Jika Berhasil (Success)
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#E8D5B5',
+                confirmButtonText: 'OK',
+                color: '#48311B'
+            });
+        @endif
+
+        // Jika Gagal (Error Session)
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Coba Lagi'
+            });
+        @endif
+
+        // Jika Error Validasi (Input salah)
+        @if($errors->any())
+            Swal.fire({
+                icon: 'warning',
+                title: 'Periksa Inputan!',
+                html: "{!! implode('<br>', $errors->all()) !!}", 
+                confirmButtonColor: '#f6d59e',
+                confirmButtonText: 'OK',
+                color: '#48311B'
+            });
+        @endif
+    </script>
 </body>
 
 </html>

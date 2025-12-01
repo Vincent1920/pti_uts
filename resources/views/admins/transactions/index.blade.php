@@ -110,11 +110,9 @@
                                         </div>
                                     @else
                                         @if($trans->payment_proof)
-                                            <a href="{{ asset('storage/' . $trans->payment_proof) }}" target="_blank">
-                                                <img src="{{ asset('storage/' . $trans->payment_proof) }}" 
-                                                     class="w-full h-32 object-cover rounded border border-gray-300 hover:opacity-75 transition cursor-zoom-in"
-                                                     alt="Bukti TF">
-                                            </a>
+                                           <a href="{{ asset($trans->payment_proof) }}" target="_blank">
+                                            <img src="{{ asset($trans->payment_proof) }}" ... >
+                                        </a>
                                             <p class="text-center text-xs text-gray-400 mt-1">Klik gambar untuk memperbesar</p>
                                         @else
                                             <div class="bg-red-50 text-red-800 text-xs p-2 rounded text-center">

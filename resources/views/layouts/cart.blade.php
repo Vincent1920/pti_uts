@@ -164,48 +164,46 @@
                 </div>
 
                 <div class="flex items-center space-x-6">
-                    @auth
-                    <!-- Tambahkan ID 'dropdown-container' untuk referensi JS -->
-                    <div id="dropdown-container" class="relative z-50">
+    @auth
+        <div id="dropdown-container" class="relative z-50">
 
-                        <!-- Tambahkan ID 'dropdown-btn' dan event onclick -->
-                        <button id="dropdown-btn" onclick="toggleDropdown()"
-                            class="text-3xl font-qwigley text-black hover:text-gold transition flex items-center gap-2 focus:outline-none">
-                            {{ auth()->user()->username }}
+            <button id="dropdown-btn" onclick="toggleDropdown()"
+                class="text-3xl font-qwigley text-black hover:text-gold transition flex items-center gap-2 focus:outline-none">
+                {{ auth()->user()->username }}
+                <i id="dropdown-icon"
+                    class="bi bi-chevron-down text-sm pt-1 transition-transform duration-300"></i>
+            </button>
 
-                            <!-- ID 'dropdown-icon' untuk animasi panah -->
-                            <i id="dropdown-icon"
-                                class="bi bi-chevron-down text-sm pt-1 transition-transform duration-300"></i>
-                        </button>
+            <div id="dropdown-menu"
+                class="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-md overflow-hidden hidden border border-gray-100 origin-top-right">
 
-                        <!-- Hapus 'group-hover:block', biarkan default 'hidden' -->
-                        <!-- Tambahkan ID 'dropdown-menu' -->
-                        <div id="dropdown-menu"
-                            class="absolute right-0 mt-2 w-48 bg-white shadow-xl rounded-md overflow-hidden hidden border border-gray-100 origin-top-right">
+                @if (auth()->user()->role === 'admin')
+                    <a href="/admin"
+                        class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
+                        <i class="bi bi-person-lock mr-3 text-gold"></i> Admin Panel
+                    </a>
+                @endif
 
-                            @if (auth()->user()->role === 'admin')
-                            <a href="/admin"
-                                class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
-                                <i class="bi bi-person-lock mr-3 text-gold"></i> Admin Panel
-                            </a>
-                            @endif
+                <a href="{{ route('cart') }}"
+                    class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
+                    <i class="bi bi-basket2-fill mr-3 text-gold"></i> Keranjang
+                </a>
 
-                            <a href="{{ route('cart') }}"
-                                class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
-                                <i class="bi bi-basket2-fill mr-3 text-gold"></i> Keranjang
-                            </a>
+                <a href="{{ route('orders.index') }}"
+                    class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-alice hover:text-choco transition flex items-center">
+                    <i class="bi bi-receipt mr-3 text-gold"></i> Order List
+                </a>
 
-                            <a href="{{ route('logout') }}"
-                                class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-t border-gray-100 flex items-center">
-                                <i class="bi bi-box-arrow-right mr-3 text-red-400"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-                    @else
-                    <a href="/login" class="text-4xl font-qwigley text-black hover:text-gold transition">Login</a>
-                    @endauth
-                </div>
+                <a href="{{ route('logout') }}"
+                    class="block px-4 py-3 text-lg font-manuale text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-t border-gray-100 flex items-center">
+                    <i class="bi bi-box-arrow-right mr-3 text-red-400"></i> Logout
+                </a>
             </div>
+        </div>
+    @else
+        <a href="/login" class="text-4xl font-qwigley text-black hover:text-gold transition">Login</a>
+    @endauth
+</div>
     </nav>
 
     <div class="max-w-6xl mx-auto px-4 py-10 min-h-screen">

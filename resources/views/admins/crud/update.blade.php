@@ -80,6 +80,21 @@
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
+<div>
+            <label for="jumlah_barang" class="block text-sm font-medium text-gray-700">Jumlah Barang</label>
+            <div class="mt-1">
+                <input type="number" 
+                       id="jumlah_barang" 
+                       name="jumlah_barang" 
+                       required 
+                       min="1"
+                       value="{{ old('jumlah_barang', $barang->jumlah_barang) }}"
+                       class="block w-full rounded-md border-gray-300 shadow-sm focus:border-choco focus:ring-choco sm:text-sm p-2.5 border @error('jumlah_barang') border-red-500 @enderror">
+            </div>
+            @error('jumlah_barang')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Post Image (Opsional)</label>
