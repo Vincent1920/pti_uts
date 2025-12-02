@@ -115,37 +115,60 @@
             <!-- Input Jumlah -->
             <div class="w-full">
                 <label class="block text-[18px] text-[#0f0f0e] mb-2 text-center">Jumlah Barang</label>
+                
+                <p class="text-center text-xs text-red-500 mb-2 font-sans">
+                    Stok Tersisa: {{ $barang->jumlah_barang }}
+                </p>
+
                 <div class="flex justify-center">
-                    <input type="number" name="quantity" min="1" value="1" required
-                        class="w-[80%] h-[45px] text-center text-xl bg-[#e2d8cf] border-2 border-transparent focus:border-[#B87C4C] rounded-lg outline-none transition-colors">
+                    <input type="number" name="quantity" min="1" max="{{ $barang->jumlah_barang }}" value="1" required
+                        class="w-[80%] h-[45px] text-center text-xl bg-[#e2d8cf] border-2 border-transparent focus:border-[#B87C4C] rounded-lg outline-none transition-colors"
+                        oninput="checkMax(this)"> 
                 </div>
             </div>
 
             <!-- Tombol 3D Flip -->
-          <div class="p-1 mt-4 rounded-xl bg-gradient-to-br from-[#575739]/20 to-[#e4a877]/20 backdrop-blur-sm border border-[#575739]/30 shadow-lg transition-shadow duration-300">
+            <div
+                class="p-1 mt-4 rounded-xl bg-gradient-to-br from-[#575739]/20 to-[#e4a877]/20 backdrop-blur-sm border border-[#575739]/30 shadow-lg hover:shadow-[#e4a877]/40 transition-shadow duration-300">
 
-    <button class="relative w-[160px] h-[50px] bg-transparent border-none cursor-pointer perspective-230 group/btn focus:outline-none tap-highlight-transparent">
+                <button
+                    class="relative w-[160px] h-[50px] bg-transparent border-none cursor-pointer perspective-230 group/btn">
 
-        <span class="absolute block w-full h-full inset-0 bg-gradient-to-r from-[#e4a877] to-[#d6955b] rounded-lg flex items-center justify-center 
+                    <span class="absolute block w-full h-full inset-0 bg-gradient-to-r from-[#e4a877] to-[#d6955b] rounded-lg flex items-center justify-center 
                      text-white font-bold tracking-widest text-sm shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]
-                     transition-all duration-300 ease-out 
-                     rotate-x-90 group-focus/btn:rotate-x-0 group-active/btn:rotate-x-0 group-focus/btn:shadow-[0_0_20px_rgba(228,168,119,0.6)]">
-            CHECK OUT! <i class="ml-2 fas fa-arrow-right"></i>
-        </span>
+                     transition-all duration-500 ease-out 
+                     rotate-x-90 group-hover/btn:rotate-x-0 group-hover/btn:shadow-[0_0_20px_rgba(228,168,119,0.6)]">
+                        CHECK OUT! <i class="ml-2 fas fa-arrow-right"></i>
+                    </span>
 
-        <span class="absolute block w-full h-full inset-0 bg-[#575739] rounded-lg flex items-center justify-center 
+                    <span class="absolute block w-full h-full inset-0 bg-[#575739] rounded-lg flex items-center justify-center 
                      text-[#e2d8cf] font-bold tracking-widest text-xs uppercase border border-[#6e6e4a]
-                     transition-all duration-300 ease-out 
-                     rotate-x-0 group-focus/btn:rotate-x-neg-90 group-active/btn:rotate-x-neg-90 group-focus/btn:opacity-0 group-active/btn:opacity-0 shadow-md">
-            Tambah Cart
-        </span>
+                     transition-all duration-500 ease-out 
+                     rotate-x-0 group-hover/btn:rotate-x-neg-90 group-hover/btn:opacity-0 shadow-md">
+                        Tambah Cart
+                    </span>
 
-    </button>
-</div>
+                </button>
+            </div>
         </form>
 
     </div>
 
 </div>
-
+<script>
+    function checkMax(input) {
+        const max = parseInt(input.max);
+        const min = parseInt(input.min);
+        
+        if (parseInt(input.value) > max) {
+            // Jika input melebihi max, kembalikan ke nilai max
+            input.value = max;
+            // Opsional: Tampilkan alert kecil
+            // alert('Maksimal pembelian adalah ' + max + ' item'); 
+        }
+        if (parseInt(input.value) < min) {
+            input.value = min;
+        }
+    }
+</script>
 @endsection

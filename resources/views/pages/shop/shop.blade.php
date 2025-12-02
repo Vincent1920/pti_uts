@@ -124,13 +124,15 @@
 
                 @forelse ( $barangs as $barang )
                 @php
-                $isOutOfStock = $barang->stok <= 0; @endphp <div
+                // Pastikan dikonversi ke integer agar aman karena di database tipenya string
+                $stokSaatIni = (int) $barang->jumlah_barang;
+                $isOutOfStock = $stokSaatIni <= 0; @endphp <div
                     class="animate-slideUp group relative flex flex-col items-center h-[420px]">
 
                     <div
                         class="z-30 relative -mb-4 w-[60%] bg-[#fffcfc] border border-gray-100 shadow-md rounded-b-xl py-2 px-4 text-center transform transition-transform duration-300 group-hover:-translate-y-2">
                         <p class="font-['Shalimar',cursive] text-[#a17307] text-2xl font-bold">
-                            {{$barang->harga}}
+                             IDR {{ number_format($barang->harga, 0, ',', '.') }}
                         </p>
                     </div>
 
@@ -180,6 +182,10 @@
                            {{ $isOutOfStock ? 'text-gray-400 line-through decoration-red-500' : 'text-[#5c4033] group-hover:text-[#a44b03]' }}">
                             {{$barang->title}}
                         </h3>
+
+                        @if(!$isOutOfStock)
+                        <p class="text-xs text-gray-500 mt-1 font-sans">Stok: {{ $barang->jumlah_barang }}</p>
+                        @endif
                     </div>
 
             </div>
@@ -191,6 +197,7 @@
 
         </div>
     </div>
+
 </div>
 
 @endsection

@@ -79,7 +79,7 @@
 </head>
 
 
-<body>
+<body class="flex flex-col min-h-screen bg-cream text-choco">
     {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
     <script src="js/nav.js"></script>
@@ -90,9 +90,9 @@
     </style>
    
 @include('navbar.nav')
-
+<main class="flex-grow">
 @yield('container-home')
-   
+   </main>
 
 @include('footer.footer')
 
