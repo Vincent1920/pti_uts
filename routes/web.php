@@ -21,13 +21,9 @@ use App\Http\Controllers\AdminTransactionController;
 
 Route::get('/', [index::class, 'index'])->name('home');
 Route::get('/brand', [index::class, 'brand'])->name('brand');
-
 Route::get('/shop', [controller_shop::class, 'index'])->name('shop');
-
 Route::get('/card',[card::class ,'card'])->name('card');
-
 Route::middleware(['guest'])->group(function () {
-    // Sesuaikan nama class controller dengan file aslinya (controller_login vs Controller_Login)
     Route::get('/login', [controller_login::class, 'view_login'])->name('login');
     Route::post('/login', [controller_login::class, 'login'])->name('postlogin');
     Route::post('/register', [RegisterController::class, 'register'])->name('register');

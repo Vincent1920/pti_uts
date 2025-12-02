@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('index')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChocoScript - Riwayat Pesanan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kotta+One&family=Manuale:wght@400;500;600;700&family=Qwigley&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+@section('container-home')
     <script>
+
         tailwind.config = {
             theme: {
                 extend: {
@@ -32,23 +22,9 @@
             }
         }
     </script>
-</head>
 
-<body class="bg-gray-50 font-manuale text-gray-700 min-h-screen">
 
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="/" class="text-3xl font-qwigley text-black hover:text-choco transition">ChocoScript</a>
-            <div class="flex items-center gap-4">
-                <a href="{{ route('shop') }}" class="text-sm font-bold text-gray-500 hover:text-choco">Belanja Lagi</a>
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-choco text-white rounded-full flex items-center justify-center font-bold">
-                        {{ substr(auth()->user()->name, 0, 1) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+
 
     <div class="max-w-4xl mx-auto px-4 py-8">
         <h1 class="text-2xl font-kotta text-gray-900 mb-6">Daftar Transaksi</h1>
@@ -181,5 +157,4 @@
         @endif
     </div>
 
-</body>
-</html>
+@endsection
