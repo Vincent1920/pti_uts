@@ -118,7 +118,7 @@
     <div class="h-full flex justify-around items-center">
         
         <div class="relative w-[400px] h-[80%] flex justify-center group">
-            <img src="img/shop/hersheys-removebg-preview.png" alt="" class="object-contain h-full w-full">
+            <img src="../img/index/orange_milk_chocolate-removebg-preview.png" alt="" class="object-contain h-full w-full">
             <div class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#daca bf]/60 bg-white/20 backdrop-blur-sm">
                 <a class="no-underline" href="{{route('shop')}}">
                     <p class="text-[2rem] text-[#934b18]">Shop Here</p>
@@ -127,7 +127,7 @@
         </div>
 
         <div class="relative w-[400px] h-[80%] flex justify-center group">
-            <img src="img/shop/delivered_nationwide-removebg-preview.png" alt="" class="object-contain h-full w-full">
+            <img src="../img/navbar/Chocolate.png"alt="" class="object-contain h-full w-full">
             <div class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#dacabf]/60 bg-white/20 backdrop-blur-sm">
                 <a class="no-underline" href="{{route('shop')}}">
                     <p class="text-[2rem] text-[#934b18]">Shop Here</p>
@@ -136,7 +136,7 @@
         </div>
 
         <div class="relative w-[400px] h-[80%] flex justify-center group">
-            <img src="img/shop/candy_boxes-removebg-preview.png" alt="" class="object-contain h-full w-full">
+            <img src="img/index/chocolate_maker-removebg-preview.png" alt="" class="object-contain h-full w-full">
             <div class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#dacabf]/60 bg-white/20 backdrop-blur-sm">
                 <a class="no-underline" href="{{route('shop')}}">
                     <p class="text-[2rem] text-[#934b18]">Shop Here</p>

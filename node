@@ -1,6 +1,8 @@
+composer install
+
 php artisan serve
 php artisan migrate
-php artisan migrate:fresh --seed
+php artisan db:seed
 
 email    : admin@gmail.com
 password : 123456789

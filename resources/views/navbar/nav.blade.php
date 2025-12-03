@@ -67,28 +67,28 @@
 
                                     <a href="{{ route('shop') }}"
                                         class="flex flex-col items-center text-center space-y-2 p-7 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
-                                        <img src="../img/brand/Tongan_vanilla.png"
+                                        <img src="../img/navbar/dark_22.png"
                                             class="w-48 h-32 object-cover rounded-md shadow-sm" alt="Milk">
                                         <h2 class="font-rancho text-3xl text-gray-800 pt-2">Milk Magazine</h2>
                                     </a>
 
                                     <a href="{{ route('shop') }}"
                                         class="flex flex-col items-center text-center space-y-2 p-4 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
-                                        <img src="../img/brand/Tongan_vanilla.png"
+                                        <img src="../img/navbar/Chocolate.png"
                                             class="w-48 h-32 object-cover rounded-md shadow-sm" alt="Delivered">
                                         <h2 class="font-rancho text-3xl text-gray-800 pt-2">Delivered Nationwide</h2>
                                     </a>
 
                                     <a href="{{ route('shop') }}"
                                         class="flex flex-col items-center text-center space-y-2 p-4 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
-                                        <img src="../img/brand/dark_22_piece-removebg-preview.png"
+                                        <img src="../img/navbar/Super_cookies.png"
                                             class="w-48 h-32 object-contain rounded-md" alt="Chocolate">
                                         <h2 class="font-rancho text-3xl text-gray-800 pt-2">Chocolate</h2>
                                     </a>
 
                                     <a href="{{ route('shop') }}"
                                         class="flex flex-col items-center text-center space-y-2 p-4 hover:bg-white rounded-lg transition group/item transform hover:-translate-y-1">
-                                        <img src="../img/brand/Chocolate.png"
+                                        <img src="../img/navbar/Tongan_vanilla.png"
                                             class="w-48 h-32 object-cover rounded-md shadow-sm" alt="Dark Choco">
                                         <h2 class="font-rancho text-3xl text-gray-800 pt-2">Dark Choco</h2>
                                     </a>
