@@ -8,38 +8,37 @@
         [
             'name' => 'Vincent Luhulima',
             'nim'  => '10123309',
-            'img'  => 'vincent.png', // Sesuai nama file di folder aboutAS
-            'percent' => 100 // Ubah angka ini sesuai keinginan
+            'img'  => 'vincent.png',
+            'percent' => 100
         ],
         [
             'name' => 'Salsabila Nurhaliza',
             'nim'  => '10123306',
-            'img'  => 'caca.jpg', // Asumsi: caca = Salsabila
+            'img'  => 'caca.jpg',
             'percent' => 100
         ],
         [
             'name' => 'Aditya Khoerul Tammi',
             'nim'  => '10123310',
-            'img'  => 'adet.jpg', // Asumsi: adet = Aditya
+            'img'  => 'adet.jpg',
             'percent' => 100
         ],
         [
             'name' => 'Abdul Malik Febrian Zulkifli',
             'nim'  => '10123308',
-            'img'  => 'rian.jpg', // Asumsi: rian = Febrian
+            'img'  => 'rian.jpg',
             'percent' => 100
         ],
         [
             'name' => 'Alfa Riza Maftu Eka Sakti',
             'nim'  => '10123327',
-            'img'  => 'fais.jpg', // Asumsi: sisa file
+            'img'  => 'fais.jpg',
             'percent' => 100
         ]
     ];
 @endphp
 
 <style>
-    /* Animasi Bar Kontribusi */
     @keyframes loadBar {
         from { width: 0; }
         to { width: var(--width); }
@@ -62,26 +61,26 @@
     </div>
 </div>
 
-
-
-
 {{-- CONTENT SECTION --}}
 <div class="container mx-auto px-4 py-16 max-w-7xl">
-
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">
 
         @foreach($team_members as $member)
         <div class="w-full max-w-sm group">
-            
-            <div class="relative bg-white rounded-[20px] shadow-lg border border-[#e4a877]/30 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 p-6 flex flex-col items-center">
-                
+
+            <div class="relative bg-white rounded-[20px] shadow-lg border border-[#e4a877]/30 
+                        overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 
+                        p-6 flex flex-col items-center cursor-pointer pointer-events-auto">
+
                 {{-- Foto Profil --}}
                 <div class="w-40 h-40 rounded-full border-4 border-[#F8DEC3] shadow-md overflow-hidden mb-6">
-                    {{-- Mengambil gambar dari folder public/aboutAS/ --}}
-                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                         src="{{ asset('aboutAS/' . $member['img']) }}" 
-                         onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($member['name']) }}&background=F8DEC3&color=a44b03'"
-                         alt="{{ $member['name'] }}">
+                    <img 
+                        onclick="openPhoto('{{ asset('aboutAS/' . $member['img']) }}')"
+                        class="w-full h-full object-cover object-center cursor-pointer 
+                               group-hover:scale-110 transition-transform duration-500 pointer-events-auto"
+                        src="{{ asset('aboutAS/' . $member['img']) }}" 
+                        onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($member['name']) }}&background=F8DEC3&color=a44b03'"
+                        alt="{{ $member['name'] }}">
                 </div>
 
                 {{-- Nama & NIM --}}
@@ -100,7 +99,7 @@
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Kontribusi</span>
                         <span class="text-lg font-bold text-[#DD751F]">{{ $member['percent'] }}%</span>
                     </div>
-                    
+
                     <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
                         <div class="bg-gradient-to-r from-[#DD751F] to-[#a44b03] h-4 rounded-full animate-bar" 
                              style="--width: {{ $member['percent'] }}%; width: 0;"></div>
@@ -108,12 +107,38 @@
                 </div>
 
             </div>
+
         </div>
         @endforeach
 
     </div>
-
 </div>
+
+{{-- FOTO POPUP MODAL --}}
+<div id="photoModal" 
+     class="fixed inset-0 bg-black/70 hidden z-50 flex justify-center items-center p-4">
+
+    <div class="relative max-w-full max-h-full flex justify-center items-center">
+
+        <img id="photoPreview" 
+             class="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl">
+
+    </div>
+</div>
+
+<script>
+function openPhoto(src) {
+    const modal = document.getElementById('photoModal');
+    const preview = document.getElementById('photoPreview');
+
+    preview.src = src;
+    modal.classList.remove('hidden');
+}
+
+document.getElementById('photoModal').addEventListener('click', () => {
+    document.getElementById('photoModal').classList.add('hidden');
+});
+</script>
 
 
 @endsection
