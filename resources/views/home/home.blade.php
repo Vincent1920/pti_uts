@@ -4,9 +4,17 @@
 
 <style>
     @keyframes slideInLeft {
-        0% { transform: translateX(-90%); opacity: 0; }
-        100% { transform: translateX(0); opacity: 1; }
+        0% {
+            transform: translateX(-90%);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
+
     .animate-slideInLeft {
         animation: slideInLeft 1s ease-out forwards;
     }
@@ -25,28 +33,42 @@
         </h3>
 
         <div class="flex mt-[30px] ml-[40px] gap-5">
-            
-            <div class="border-2 border-[#ededed] rounded-xl transform transition duration-900 origin-top hover:scale-100">
-                <button class="group relative w-[130px] h-[44px] font-['Lato'] font-medium rounded-[10px] bg-transparent overflow-hidden transition-all duration-300 outline-none">
-                    <a href="{{route('shop')}}" class="block w-full h-full relative z-20 flex items-center justify-center text-decoration-none">
-                        <span class="absolute inset-0 w-0 bg-[#ededed] transition-all duration-300 ease-out group-hover:w-full -z-10"></span>
-                        
-                        <h2 class="font-['Redressed'] text-white group-hover:text-[#7F4D3E] text-xl transition-colors duration-300">
+
+            <div
+                class="border-2 border-[#ededed] rounded-xl transform transition duration-900 origin-top hover:scale-100">
+                <button
+                    class="group relative w-[130px] h-[44px] font-['Lato'] font-medium rounded-[10px] bg-transparent overflow-hidden transition-all duration-300 outline-none">
+                    <a href="{{route('shop')}}"
+                        class="block w-full h-full relative z-20 flex items-center justify-center text-decoration-none">
+                        <span
+                            class="absolute inset-0 w-0 bg-[#ededed] transition-all duration-300 ease-out group-hover:w-full -z-10"></span>
+
+                        <h2
+                            class="font-['Redressed'] text-white group-hover:text-[#7F4D3E] text-xl transition-colors duration-300">
                             Shop Here
                         </h2>
                     </a>
                 </button>
             </div>
+            <div
+                class="border-2 border-[#c88a5b] rounded-xl transform transition duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(200,138,91,0.5)]">
 
-            <div class="border-2 border-[#3C2622] rounded-xl transform transition duration-900 origin-top hover:bg-transparent">
-                <button class="group relative w-[130px] h-[44px] font-['Lato'] font-medium rounded-[10px] bg-transparent overflow-hidden transition-all duration-300 outline-none">
-                    <a href="{{route('about')}}" class="block w-full h-full relative z-20 flex items-center justify-center text-decoration-none">
-                         <span class="absolute inset-0 w-0 bg-[#3C2622] transition-all duration-300 ease-out group-hover:w-full -z-10"></span>
+                <button
+                    class="group relative w-[130px] h-[44px] rounded-[10px] bg-transparent overflow-hidden outline-none">
 
-                        <h2 class="font-['Redressed'] text-white group-hover:text-[#ededed] text-xl transition-colors duration-300">
-                            about as
+                    <a href="{{route('about')}}"
+                        class="block w-full h-full relative flex items-center justify-center text-decoration-none">
+
+                        <span
+                            class="absolute inset-0 w-0 bg-[#c88a5b] transition-all duration-300 ease-out group-hover:w-full"></span>
+
+                        <h2
+                            class="relative z-10 font-['Redressed'] text-[#c88a5b] group-hover:text-[#3C2622] text-xl transition-colors duration-300 m-auto pb-1">
+                            About Us
                         </h2>
+
                     </a>
+
                 </button>
             </div>
         </div>
@@ -56,7 +78,8 @@
 <br />
 
 <div class="w-full h-[100px] flex items-center justify-center">
-    <h1 class="font-['Rancho'] uppercase text-4xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-t from-[#B15716] via-[#CF9877] to-[#CF9877]">
+    <h1
+        class="font-['Rancho'] uppercase text-4xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-t from-[#B15716] via-[#CF9877] to-[#CF9877]">
         protein alami
     </h1>
 </div>
@@ -64,13 +87,15 @@
 <br />
 
 <div class="w-full min-h-[450px] flex flex-wrap justify-around p-12 gap-8">
-    
+
     <div class="w-full md:w-[30%] h-[390px] flex flex-col items-center">
         <div class="w-full h-[75%] bg-[#f0f8ff] flex justify-center items-center overflow-hidden">
             <img src="../img/navbar/Chocolate.png" alt="" class="w-full h-full object-cover">
         </div>
         <div class="mt-4 text-center">
-            <b><p class="font-['Rancho'] text-[1.5rem] text-[#584123]">IDR 10.000</p></b>
+            <b>
+                <p class="font-['Rancho'] text-[1.5rem] text-[#584123]">IDR 10.000</p>
+            </b>
             <p class="font-['Rancho'] text-[1.5rem] text-[#584123]">Baratti Milano</p>
         </div>
     </div>
@@ -80,7 +105,9 @@
             <img src="../img/navbar/dark_22.png" alt="" class="w-[90%] h-[90%] object-cover">
         </div>
         <div class="mt-4 text-center">
-            <b><p class="font-['Rancho'] text-[1.5rem] text-[#584123]">IDR 80.500</p></b>
+            <b>
+                <p class="font-['Rancho'] text-[1.5rem] text-[#584123]">IDR 80.500</p>
+            </b>
             <p class="font-['Rancho'] text-[1.5rem] text-[#584123]">Dark Choco</p>
         </div>
     </div>
@@ -92,7 +119,9 @@
             </div>
         </a>
         <div class="mt-4 text-center">
-            <b><p class="font-['Rancho'] text-[1.5rem] text-[#584123]">IDR 43.200</p></b>
+            <b>
+                <p class="font-['Rancho'] text-[1.5rem] text-[#584123]">IDR 43.200</p>
+            </b>
             <p class="font-['Rancho'] text-[1.5rem] text-[#584123]">Milk Chocolate Single Bar</p>
         </div>
     </div>
@@ -114,12 +143,14 @@
 
 <div class="w-full h-[500px] bg-[#efefef] font-['Rancho'] py-8">
     <h1 class="text-[#7F4D3E] text-center text-4xl mb-8">Hadiah untuk setiap kesempatan</h1>
-    
+
     <div class="h-full flex justify-around items-center">
-        
+
         <div class="relative w-[400px] h-[80%] flex justify-center group">
-            <img src="../img/index/orange_milk_chocolate-removebg-preview.png" alt="" class="object-contain h-full w-full">
-            <div class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#daca bf]/60 bg-white/20 backdrop-blur-sm">
+            <img src="../img/index/orange_milk_chocolate-removebg-preview.png" alt=""
+                class="object-contain h-full w-full">
+            <div
+                class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#daca bf]/60 bg-white/20 backdrop-blur-sm">
                 <a class="no-underline" href="{{route('shop')}}">
                     <p class="text-[2rem] text-[#934b18]">Shop Here</p>
                 </a>
@@ -127,8 +158,9 @@
         </div>
 
         <div class="relative w-[400px] h-[80%] flex justify-center group">
-            <img src="../img/navbar/Chocolate.png"alt="" class="object-contain h-full w-full">
-            <div class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#dacabf]/60 bg-white/20 backdrop-blur-sm">
+            <img src="../img/navbar/Chocolate.png" alt="" class="object-contain h-full w-full">
+            <div
+                class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#dacabf]/60 bg-white/20 backdrop-blur-sm">
                 <a class="no-underline" href="{{route('shop')}}">
                     <p class="text-[2rem] text-[#934b18]">Shop Here</p>
                 </a>
@@ -137,7 +169,8 @@
 
         <div class="relative w-[400px] h-[80%] flex justify-center group">
             <img src="img/index/chocolate_maker-removebg-preview.png" alt="" class="object-contain h-full w-full">
-            <div class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#dacabf]/60 bg-white/20 backdrop-blur-sm">
+            <div
+                class="absolute top-[35%] border-2 border-[#f4f4f4] w-[150px] h-[50px] flex items-center justify-center rounded-[10%] cursor-pointer transition-colors duration-300 hover:bg-[#dacabf]/60 bg-white/20 backdrop-blur-sm">
                 <a class="no-underline" href="{{route('shop')}}">
                     <p class="text-[2rem] text-[#934b18]">Shop Here</p>
                 </a>
