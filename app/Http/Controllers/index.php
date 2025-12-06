@@ -22,4 +22,7 @@ class index extends Controller
     public function brand(){
         return view('brand.brand');
     }
+     public function about(){
+        return view('about');
+    }
 }

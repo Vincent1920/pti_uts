@@ -40,11 +40,11 @@
 
             <div class="border-2 border-[#3C2622] rounded-xl transform transition duration-900 origin-top hover:bg-transparent">
                 <button class="group relative w-[130px] h-[44px] font-['Lato'] font-medium rounded-[10px] bg-transparent overflow-hidden transition-all duration-300 outline-none">
-                    <a href="{{route('learn')}}" class="block w-full h-full relative z-20 flex items-center justify-center text-decoration-none">
+                    <a href="{{route('about')}}" class="block w-full h-full relative z-20 flex items-center justify-center text-decoration-none">
                          <span class="absolute inset-0 w-0 bg-[#3C2622] transition-all duration-300 ease-out group-hover:w-full -z-10"></span>
 
                         <h2 class="font-['Redressed'] text-white group-hover:text-[#ededed] text-xl transition-colors duration-300">
-                            learn here
+                            about as
                         </h2>
                     </a>
                 </button>

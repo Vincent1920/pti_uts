@@ -20,6 +20,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminTransactionController;
 
 Route::get('/', [index::class, 'index'])->name('home');
+Route::get('/about', [index::class, 'about'])->name('about');
 Route::get('/brand', [index::class, 'brand'])->name('brand');
 Route::get('/shop', [controller_shop::class, 'index'])->name('shop');
 Route::get('/kategori/{kategori}', [controller_shop::class, 'showKategori'])->name('kategori.show');
