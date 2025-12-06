@@ -29,4 +29,30 @@ class controller_shop extends Controller
         ]);
 
     }
+
+public function showKategori(Kategori $kategori)
+{
+    return view('pages.shop.kategori', [
+        'kategori'  => $kategori,              // Kategori yang dipilih (Judul)
+        'kategoris' => Kategori::all(),        // List untuk Sidebar
+        'barangs'   => $kategori->barangs      // Produk yang sudah difilter
+    ]);
+}
+
+//     public function showKategori(Kategori $kategori)
+// {
+//     // Ambil kategori untuk sidebar
+//     $kategoris = Kategori::all();
+
+//     // Ambil barang HANYA yang termasuk kategori yang dipilih
+//     // Menggunakan relasi yang dibuat di langkah 1
+//     $barangs = $kategori->barangs; 
+    
+//     // Ubah judul agar dinamis
+//     $judulHalaman = "Kategori: " . $kategori->nama_kategori;
+
+//     // Return ke View yang SAMA dengan data yang sudah difilter
+//     return view('', compact('kategoris', 'barangs', 'judulHalaman'));
+// }
+
 }

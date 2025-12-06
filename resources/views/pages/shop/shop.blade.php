@@ -57,10 +57,9 @@
 <div class="relative w-full h-[350px] bg-gray-800 flex justify-center items-center overflow-hidden">
     <div class="absolute inset-0 bg-[url('../../img/shop/home.webp')] bg-cover bg-center opacity-60"></div>
     <div class="relative z-10 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-        <h2
-            class="text-white font-['Ribeye_Marrow',serif] text-5xl animate-pulse text-center drop-shadow-lg tracking-wide">
-            Seluruh ChocoScript
-        </h2>
+        <h2 class="text-white font-['Ribeye_Marrow',serif] text-5xl animate-pulse text-center drop-shadow-lg tracking-wide">
+    {{ $judulHalaman ?? 'Seluruh ChocoScript' }}
+</h2>
     </div>
 </div>
 

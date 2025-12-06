@@ -22,6 +22,7 @@ use App\Http\Controllers\AdminTransactionController;
 Route::get('/', [index::class, 'index'])->name('home');
 Route::get('/brand', [index::class, 'brand'])->name('brand');
 Route::get('/shop', [controller_shop::class, 'index'])->name('shop');
+Route::get('/kategori/{kategori}', [controller_shop::class, 'showKategori'])->name('kategori.show');
 Route::get('/card',[card::class ,'card'])->name('card');
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [controller_login::class, 'view_login'])->name('login');
