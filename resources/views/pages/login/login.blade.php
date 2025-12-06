@@ -240,7 +240,7 @@
         @endif
 
         // Jika Error Validasi (Input salah)
-        @if($errors - > any())
+        @if($errors -> any())
         Swal.fire({
             icon: 'warning',
             title: 'Periksa Inputan!',
