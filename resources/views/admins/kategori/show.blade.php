@@ -10,7 +10,7 @@
             <p class="text-sm text-gray-500">List semua kategori produk yang tersedia.</p>
         </div>
 
-        <a href="{{route('kategori.create')}}"
+        <a href="../../kategori/create"
             class="bg-choco hover:bg-opacity-90 text-white text-sm font-bold px-4 py-2 rounded shadow transition">
             <i class="bi bi-plus-lg me-1"></i> Tambah Kategori
         </a>

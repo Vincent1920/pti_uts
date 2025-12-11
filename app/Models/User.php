@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\VerifyEmailUser;
+class User extends Authenticatable implements MustVerifyEmail // Tambahkan 'implements MustVerifyEmail'
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,8 +18,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
     protected $fillable = [
-        'name', 'email', 'password', 'is_admin','username',
+        'name', 'email', 'password', 'is_admin','username','email_verified_at',
 
     ];
 
@@ -37,6 +39,13 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
+
+    public function sendEmailVerificationNotification()
+    {
+       
+        $this->notify(new VerifyEmailUser($this));
+    }
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];

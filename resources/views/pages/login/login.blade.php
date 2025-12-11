@@ -104,7 +104,17 @@
 <body
     class="bg-choco-bg font-montserrat flex flex-col items-center justify-center min-h-screen relative overflow-x-hidden"
     onload="hideLoadingScreen()">
+@if (session('success'))
+    <div class="alert alert-success bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        {{ session('success') }}
+    </div>
+@endif
 
+@if (session('warning'))
+    <div class="alert alert-warning bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4">
+        {{ session('warning') }}
+    </div>
+@endif
     {{-- <div id="loading-screen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-500">
         <img src="img/b734317dc97d8d22aec2f5b29e0e8672-removebg-preview.png" alt="Loading..." class="w-24 h-24 animate-spin-slow object-contain">
     </div> --}}
@@ -132,14 +142,37 @@
 
                 <span class="text-xs text-[#e6c58c] mb-4 mt-4">use your email for registration</span>
 
-                <input type="text" name="name" placeholder="Name"
-                    class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
-                <input type="text" name="username" placeholder="Username"
-                    class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
-                <input type="email" name="email" placeholder="Email"
-                    class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
-                <input type="password" name="password" placeholder="Password"
-                    class="bg-[#eee] border-none p-3 my-2 w-full outline-none" />
+                <div class="w-full">
+                    <input type="text" name="name" placeholder="Name" value="{{ old('name') }}"
+                        class="bg-[#eee] border-none p-3 my-2 w-full outline-none @error('name') border border-red-500 @enderror" />
+                    @error('name')
+                    <span class="text-red-500 text-xs float-left">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="w-full">
+                    <input type="text" name="username" placeholder="Username" value="{{ old('username') }}"
+                        class="bg-[#eee] border-none p-3 my-2 w-full outline-none @error('username') border border-red-500 @enderror" />
+                    @error('username')
+                    <span class="text-red-500 text-xs float-left">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="w-full">
+                    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}"
+                        class="bg-[#eee] border-none p-3 my-2 w-full outline-none @error('email') border border-red-500 @enderror" />
+                    @error('email')
+                    <span class="text-red-500 text-xs float-left">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="w-full">
+                    <input type="password" name="password" placeholder="Password"
+                        class="bg-[#eee] border-none p-3 my-2 w-full outline-none @error('password') border border-red-500 @enderror" />
+                    @error('password')
+                    <span class="text-red-500 text-xs float-left">{{ $message }}</span>
+                    @enderror
+                </div>
 
                 <button type="submit"
                     class="rounded-[20px] border border-choco-border bg-choco-btn text-[#432900] text-xs font-bold uppercase py-3 px-10 mt-4 tracking-wider transition-transform active:scale-95 focus:outline-none hover:bg-[#e0cba0]">
