@@ -15,6 +15,9 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminTransactionController;
+use App\Http\Controllers\PaymentController;
+
+
 
 
 /*
@@ -58,6 +61,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['signed'])->name('verification.verify');
 
 
+
 /*
 |--------------------------------------------------------------------------
 | 3. RUTE USER (Login + Verified)
@@ -83,8 +87,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('cart/remove/{id}', [card::class, 'remove'])->name('cart.remove');
 
     // Checkout & Transaksi
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    
+    Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
+    // Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    // Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     
     // Riwayat Pesanan
     Route::get('/orders', [CheckoutController::class, 'history'])->name('orders.index');
