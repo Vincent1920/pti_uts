@@ -15,22 +15,45 @@
     </div>
 </div>
 
-<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.clientKey') }}"></script>
-
+<script type="text/javascript"
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="Mid-client-U32ikRzP-WQGbNGj">
+</script>
 <script type="text/javascript">
     const payButton = document.getElementById('pay-button');
     
+    // Fungsi untuk membuka Snap
     function openSnap() {
-        window.snap.pay('{{ $snapToken }}', {
-            onSuccess: function(result) { window.location.href = '/home'; },
-            onPending: function(result) { window.location.href = '/home'; },
-            onError: function(result) { alert("Pembayaran Gagal!"); },
-            onClose: function() { alert('Anda menutup jendela pembayaran.'); }
-        });
+        // Cek apakah snap sudah terload
+        if (window.snap) {
+            window.snap.pay('{{ $snapToken }}', {
+                onSuccess: function(result) { 
+                    window.location.href = "{{ route('home') }}?status=success"; 
+                },
+                onPending: function(result) { 
+                    window.location.href = "{{ route('home') }}?status=pending"; 
+                },
+                onError: function(result) { 
+                    console.log(result);
+                    alert("Pembayaran Gagal!"); 
+                },
+                onClose: function() { 
+                    alert('Anda menutup jendela pembayaran sebelum menyelesaikan transaksi.'); 
+                }
+            });
+        } else {
+            alert('Midtrans Snap belum siap. Silakan refresh halaman.');
+        }
     }
 
-    // Auto-open saat halaman load
-    window.onload = openSnap;
-    payButton.onclick = openSnap;
+    payButton.onclick = function(e) {
+        e.preventDefault();
+        openSnap();
+    };
+
+    // Auto open (opsional)
+    window.onload = function() {
+        setTimeout(openSnap, 500);
+    };
 </script>
 @endsection
