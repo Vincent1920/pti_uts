@@ -17,14 +17,14 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-   public function boot()
+public function boot()
 {
     \Midtrans\Config::$serverKey = config('midtrans.server_key');
     \Midtrans\Config::$isProduction = config('midtrans.is_production');
-    \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
-    \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
+    \Midtrans\Config::$isSanitized = true;
+    \Midtrans\Config::$is3ds = true;
 
-    // Pakai cara ini supaya tidak merah di VS Code
+    // Tambahkan ini jika masih gagal di localhost
     \Midtrans\Config::$curlOptions = [
         CURLOPT_SSL_VERIFYPEER => false,
     ];

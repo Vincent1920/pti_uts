@@ -87,7 +87,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('cart/remove/{id}', [card::class, 'remove'])->name('cart.remove');
 
     // Checkout & Transaksi
-    
     Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
     // Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
