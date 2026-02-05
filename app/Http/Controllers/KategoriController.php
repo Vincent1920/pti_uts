@@ -22,10 +22,13 @@ class KategoriController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        return view('admins.kategori.create');
-    }
+   public function create()
+{
+    // Cek apakah ini muncul di browser?
+    // return "Route berhasil diakses! Jika ini muncul, berarti masalah ada di folder View.";
+    return view('admins.kategori.create');
+    // return view('admins.kategori.create'); // matikan dulu sementara
+}
 
     /**
      * Store a newly created resource in storage.
@@ -88,7 +91,10 @@ class KategoriController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        //
-    }
+{
+    $kategori = Kategori::findOrFail($id);
+    $kategori->delete();
+
+    return redirect()->back()->with('success', 'Data berhasil dihapus!');
+}
 }

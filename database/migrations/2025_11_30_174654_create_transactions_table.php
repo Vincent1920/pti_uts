@@ -16,21 +16,26 @@ Schema::create('transactions', function (Blueprint $table) {
     
     $table->string('invoice_code')->unique();
     $table->decimal('subtotal', 15, 2);
-    $table->decimal('discount_amount', 15, 2)->default(0);
+    // Tambahkan default 0 agar tidak error saat tidak ada diskon
+    $table->decimal('discount_amount', 15, 2)->default(0); 
     $table->decimal('grand_total', 15, 2);
-    $table->string('payment_proof')->nullable();
-    // PERUBAHAN DI SINI:
-    // Hapus first_name & last_name, ganti jadi name
-    $table->string('name'); // Nama Penerima
+    
+    // Kolom untuk menyimpan token dari Midtrans (Sangat Penting)
+    $table->string('snap_token')->nullable(); 
+    
+    $table->string('name'); 
     $table->string('email');
     $table->string('phone');
     $table->string('address');
     $table->string('city');
     $table->string('postal_code');
     $table->string('country')->default('Indonesia');
-    $table->string('status');
-    $table->string('payment_method')->nullable();
     
+    // Status transaksi (pending, success, settlement, expire, cancel)
+    $table->string('status')->default('pending'); 
+    $table->string('payment_method')->nullable();
+     
+
     $table->timestamps();
 });
 // ...

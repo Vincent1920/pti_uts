@@ -9,7 +9,22 @@ class Transaction extends Model
 {
     use HasFactory;
     
-    protected $guarded = [];
+    protected $fillable = [
+    'user_id', 
+    'invoice_code', 
+    'subtotal', 
+    'discount_amount', 
+    'grand_total', 
+    'snap_token', // <--- WAJIB ADA
+    'status',
+    'name', 
+    'email', 
+    'phone', 
+    'address', 
+    'city', 
+    'postal_code', 
+    'payment_method'
+];
 
     // Relasi ke User
     public function user()

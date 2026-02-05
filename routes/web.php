@@ -62,6 +62,9 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 
 
+    Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
+    // Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
+    Route::post('/checkout/process', [PaymentController::class, 'testMidtrans'])->name('checkout.process');
 /*
 |--------------------------------------------------------------------------
 | 3. RUTE USER (Login + Verified)
@@ -88,8 +91,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Checkout & Transaksi
     
-    Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
+
     // Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     // Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     
@@ -121,11 +123,16 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('/update/{barang}', [BarangController::class, 'update']);
 
     // Manajemen Kategori
-    Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori');
-    Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
-    Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
-    Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
-    Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+  Route::resource('kategori', KategoriController::class);
+
+//     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori');
+//     Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
+//     Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+
+//    Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+//     Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+//     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+//     Route::delete('/kategor/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
     // Manajemen Diskon
     Route::get('/diskon', [DiskonController::class, 'index'])->name('diskon.index');

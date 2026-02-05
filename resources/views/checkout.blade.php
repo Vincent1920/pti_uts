@@ -147,7 +147,7 @@
                                 class="text-choco_light hover:text-choco text-sm flex items-center transition font-medium">
                                 <i class="bi bi-chevron-left text-xs mr-2"></i> Kembali ke Keranjang
                             </a>
-                            <button type="submit"
+                            <button type="submit" id="pay-button"
                                 class="w-full sm:w-auto bg-choco hover:bg-choco_light text-white font-bold py-4 px-10 rounded-lg transition duration-300 text-sm shadow-lg transform hover:-translate-y-1 active:scale-95">
                                 Konfirmasi & Buat Pesanan
                             </button>
@@ -281,4 +281,28 @@
     });
     @endif
 </script>
+
 @endsection
+
+{{-- @section('container-home')
+      <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<Set your ClientKey here>"></script>
+    <script type="text/javascript">
+      document.getElementById('pay-button').onclick = function(){
+        // SnapToken acquired from previous step
+        snap.pay('<?=$snapToken?>', {
+          // Optional
+          onSuccess: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onPending: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onError: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          }
+        });
+      };
+    </script>
+@endsection --}}

@@ -10,10 +10,9 @@
             <p class="text-sm text-gray-500">List semua kategori produk yang tersedia.</p>
         </div>
 
-        <a href="../../kategori/create"
-            class="bg-choco hover:bg-opacity-90 text-white text-sm font-bold px-4 py-2 rounded shadow transition">
-            <i class="bi bi-plus-lg me-1"></i> Tambah Kategori
-        </a>
+       <a href="{{ route('kategori.create') }}" class="...">
+    Tambah Kategori
+</a>
     </div>
 
     <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
@@ -39,15 +38,22 @@
 
                     <td class="px-6 py-4 text-center">
                         <div class="flex justify-center gap-2">
-                            <a href="{{route('kategori.edit', $kategori->id)}}" class="p-2 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 transition"
-                                title="Edit">
+                            <a href="{{ route('kategori.edit', $kategori->id) }}" 
+                            class="p-2 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100 transition"
+                            title="Edit">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
 
-                            <button class="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"
-                                title="Hapus">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                           <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="p-2 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"
+                                        onclick="return confirm('Yakin ingin menghapus data ini?')"
+                                        title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>

@@ -13,7 +13,7 @@
                     </button>
                 </a>
 
-                <a href="{{route('kategori')}} " class="block w-full">
+                <a href="{{route('kategori.index')}} " class="block w-full">
                     <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
                         <span>Kategori</span>
                     </button>
