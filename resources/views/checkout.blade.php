@@ -281,28 +281,65 @@
     });
     @endif
 </script>
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" 
+        data-client-key="{{ config('services.midtrans.clientKey') }}"></script>
 
+<script>
+    const checkoutForm = document.querySelector('form[action="{{ route("checkout.process") }}"]');
+    const payButton = document.getElementById('pay-button');
+
+    checkoutForm.addEventListener('submit', async function(e) {
+        // Cek jika metode pembayaran yang dipilih adalah Midtrans
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        
+        if (paymentMethod === 'midtrans') {
+            e.preventDefault(); // Stop form dari refresh halaman
+            
+            payButton.disabled = true;
+            payButton.innerHTML = "Processing...";
+
+            try {
+                // 1. Kirim data form ke Controller via AJAX
+                const formData = new FormData(checkoutForm);
+                const response = await fetch("{{ route('checkout.process') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // 2. Munculkan Popup Midtrans
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            window.location.href = "{{ route('home') }}"; 
+                        },
+                        onPending: function(result) {
+                            Swal.fire('Pending', 'Menunggu pembayaran anda', 'info');
+                        },
+                        onError: function(result) {
+                            Swal.fire('Gagal', 'Pembayaran gagal dilakukan', 'error');
+                        },
+                        onClose: function() {
+                            payButton.disabled = false;
+                            payButton.innerHTML = "Konfirmasi & Buat Pesanan";
+                        }
+                    });
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                    payButton.disabled = false;
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Terjadi kesalahan sistem.', 'error');
+                payButton.disabled = false;
+            }
+        }
+        // Jika COD, biarkan form submit normal
+    });
+</script>
 @endsection
-
-{{-- @section('container-home')
-      <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<Set your ClientKey here>"></script>
-    <script type="text/javascript">
-      document.getElementById('pay-button').onclick = function(){
-        // SnapToken acquired from previous step
-        snap.pay('<?=$snapToken?>', {
-          // Optional
-          onSuccess: function(result){
-            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-          },
-          // Optional
-          onPending: function(result){
-            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-          },
-          // Optional
-          onError: function(result){
-            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-          }
-        });
-      };
-    </script>
-@endsection --}}

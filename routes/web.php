@@ -63,8 +63,8 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 
     Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
-    // Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
-    Route::post('/checkout/process', [PaymentController::class, 'testMidtrans'])->name('checkout.process');
+    Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
+    // Route::post('/checkout/process', [PaymentController::class, 'testMidtrans'])->name('checkout.process');
 /*
 |--------------------------------------------------------------------------
 | 3. RUTE USER (Login + Verified)
@@ -145,3 +145,5 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('admin.transactions.index');
     Route::patch('/transactions/{id}/status', [AdminTransactionController::class, 'updateStatus'])->name('admin.transactions.updateStatus');
 });
+
+Route::get('/midtrans-test', [PaymentController::class, 'testMidtrans']);

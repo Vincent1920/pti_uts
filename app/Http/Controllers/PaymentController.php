@@ -16,19 +16,15 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-public function __construct()
-{
-    \Midtrans\Config::$serverKey = config('midtrans.server_key');
-    \Midtrans\Config::$isProduction = config('midtrans.is_production');
-    \Midtrans\Config::$isSanitized = true;
-    \Midtrans\Config::$is3ds = true;
-
-    // Pastikan menggunakan konstanta CURLOPT yang benar
-    // Ini memperbaiki "SSL certificate problem" sekaligus error "Undefined array key"
-    \Midtrans\Config::$curlOptions = [
-        CURLOPT_SSL_VERIFYPEER => false,
-    ];
-}
+ public function __construct()
+    {
+        // Set Midtrans configuration
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
+        // \Midtrans\Config::$isVerifyPeer = false;
+    }
 
     public function index()
     {
@@ -141,100 +137,85 @@ public function __construct()
 
 
 
-    private function handleMidtrans($transaction, $cartItems, $grandTotal)
-    {
-        $itemDetails = [];
-        
-        // Detail barang untuk Midtrans
-        foreach ($cartItems as $item) {
-            $itemDetails[] = [
-                'id'       => 'PRD-' . $item->barang_id,
-                'price'    => (int)$item->barang->harga,
-                'quantity' => (int)$item->quantity,
-                'name'     => substr($item->barang->title, 0, 50),
-            ];
-        }
-
-        // Tambahkan item diskon sebagai harga minus jika ada
-        if ($transaction->discount_amount > 0) {
-            $itemDetails[] = [
-                'id'       => 'DISC-PROMO',
-                'price'    => -(int)$transaction->discount_amount,
-                'quantity' => 1,
-                'name'     => 'Potongan Harga',
-            ];
-        }
-
-        $params = [
-            'transaction_details' => [
-                'order_id'     => $transaction->invoice_code,
-                'gross_amount' => (int)$grandTotal, 
-            ],
-            'item_details' => $itemDetails,
-            'customer_details' => [
-                'first_name' => $transaction->name,
-                'email'      => $transaction->email,
-                'phone'      => $transaction->phone,
-            ],
+ private function handleMidtrans($transaction, $cartItems, $grandTotal)
+{
+    $itemDetails = [];
+    foreach ($cartItems as $item) {
+        $itemDetails[] = [
+            'id'       => 'PRD-' . $item->barang_id,
+            'price'    => (int)$item->barang->harga,
+            'quantity' => (int)$item->quantity,
+            'name'     => substr($item->barang->title, 0, 50),
         ];
-
-        $params = [
-                'transaction_details' => [
-                    'order_id' => 'TEST-' . time(),
-                    'gross_amount' => 10000,
-                ],
-            ];
-
-            try {
-                $snapToken = \Midtrans\Snap::getSnapToken($params);
-                dd($snapToken); // Kalau ini muncul "string", berarti koneksi aman.
-            } catch (\Exception $e) {
-                dd($e->getMessage()); // Lihat pesan errornya di sini
-            }
-        // try {
-        //     $snapToken = Snap::getSnapToken($params);
-
-        //     // DEBUG DISINI: Hapus "//" di bawah untuk melihat token
-        //     dd($snapToken); 
-
-        //     $transaction->update(['snap_token' => $snapToken]);
-            
-        //     // Hapus keranjang setelah token didapat
-        //     CartItem::where('user_id', Auth::id())->delete();
-
-        //     // Pastikan view 'payment_confirm' ada
-        //     return view('payment_confirm', compact('snapToken', 'transaction'));
-
-        // } catch (\Exception $e) {
-        //     Log::error('Midtrans API Error: ' . $e->getMessage());
-        //     return redirect()->back()->with('error', 'Gagal memproses ke Midtrans: ' . $e->getMessage());
-        // }
     }
 
-public function testMidtrans()
-{
-    // PASTIIN kuncinya diawali SB-Mid-server- baru bisa jalan di Sandbox
-    \Midtrans\Config::$serverKey = 'Mid-server-Etwcgcy0zmkeXeYVkVRXT-qB'; 
-    \Midtrans\Config::$isProduction = false; 
-    \Midtrans\Config::$isSanitized = true;
-    \Midtrans\Config::$is3ds = true;
+    if ($transaction->discount_amount > 0) {
+        $itemDetails[] = [
+            'id'       => 'DISC-PROMO',
+            'price'    => -(int)$transaction->discount_amount,
+            'quantity' => 1,
+            'name'     => 'Potongan Harga',
+        ];
+    }
 
     $params = [
         'transaction_details' => [
-            'order_id' => 'TEST-' . time(),
-            'gross_amount' => 10000, 
+            'order_id'     => $transaction->invoice_code . '-' . time(), // Tambah time agar selalu unik saat testing
+            'gross_amount' => (int)$grandTotal, 
+        ],
+        'item_details' => $itemDetails,
+        'customer_details' => [
+            'first_name' => $transaction->name,
+            'email'      => $transaction->email,
+            'phone'      => $transaction->phone,
         ],
     ];
 
     try {
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        
-        // Kalo berhasil, layar bakal muncul string token (bukan error key 10023 lagi)
-        dd($snapToken); 
-        
+        $snapToken = Snap::getSnapToken($params);
+        $transaction->update(['snap_token' => $snapToken]);
+
+        // Kirim respon JSON ke AJAX
+        return response()->json([
+            'success' => true,
+            'snap_token' => $snapToken
+        ]);
+
     } catch (\Exception $e) {
-        // Kalo masih gagal, ini bakal kasih tau error aslinya apa
-        dd("Error Midtrans: " . $e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
     }
 }
+
+// public function testMidtrans()
+// {
+//     // Konfigurasi Midtrans (Sandbox)
+//     Config::$serverKey = config('midtrans.server_key');
+//     Config::$isProduction = false; // WAJIB false untuk Sandbox
+//     Config::$isSanitized = true;
+//     Config::$is3ds = true;
+
+//     $params = [
+//         'transaction_details' => [
+//             'order_id' => 'ORDER-' . uniqid(),
+//             'gross_amount' => 10000,
+//         ],
+//         'customer_details' => [
+//             'first_name' => 'Aditya',
+//             'email' => 'aditya@example.com',
+//         ],
+//     ];
+
+//     try {
+//         $snapToken = Snap::getSnapToken($params);
+
+//         // 👇 INI YANG KAMU MAU
+//         dd($snapToken);
+
+//     } catch (\Exception $e) {
+//         dd('Error Midtrans:', $e->getMessage());
+//     }
+// }
 }
