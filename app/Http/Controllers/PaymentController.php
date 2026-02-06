@@ -236,51 +236,5 @@ private function finalizeSuccessTransaction($transaction, $statusMidtrans)
     // Hapus keranjang user
     \App\Models\CartItem::where('user_id', $transaction->user_id)->delete();
 }
-public function checkStatus($invoiceCode)
-{
-    // Konfigurasi Server Key
-    Config::$serverKey = config('services.midtrans.serverKey');
-    
-    // Ambil status langsung dari API Midtrans
-    $status = MidtransTransaction::status($invoiceCode);
-    
-    return $status; // Ini akan mengembalikan object berisi transaction_status, gross_amount, dll.
-}
-
-public function showOrderDetail($invoiceCode)
-{
-    $midtransStatus = $this->checkStatus($invoiceCode);
-    
-    // Ambil status spesifiknya
-
-    return view('order.status', compact('statusTerbaru', 'metodePembayaran'));
-}
-
-public function cancelTransaction($invoiceCode)
-{
-    $transaction = Transaction::where('invoice_code', $invoiceCode)
-                               ->where('status', 'pending')
-                               ->first();
-
-    if ($transaction) {
-        DB::beginTransaction();
-        try {
-            // Kembalikan stok
-            foreach ($transaction->items as $item) {
-                $item->barang->increment('jumlah_barang', $item->quantity);
-            }
-            
-            // Ubah status jadi failed/cancelled atau hapus
-            $transaction->update(['status' => 'failed']); 
-            // Atau $transaction->delete(); // Jika ingin benar-benar hilang
-
-            DB::commit();
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['success' => false]);
-        }
-    }
-}
 
 }
