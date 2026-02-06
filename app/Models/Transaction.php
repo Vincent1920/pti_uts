@@ -17,6 +17,7 @@ class Transaction extends Model
     'grand_total', 
     'snap_token', // <--- WAJIB ADA
     'status',
+    'status_midtrasn',
     'name', 
     'email', 
     'phone', 

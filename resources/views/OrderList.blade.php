@@ -44,59 +44,67 @@
         @else
             <div class="space-y-4">
                 @foreach($orders as $order)
+                {{-- @dd($order->toArray()) --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 transition hover:shadow-md">
                     
                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4 text-sm">
-    <div class="flex items-center gap-2">
-        <i class="bi bi-bag-fill text-choco"></i>
-        <span class="font-bold text-gray-900">Belanja</span>
-        <span class="text-gray-500">{{ $order->created_at->format('d M Y') }}</span>
-    </div>
+                        <div class="flex items-center gap-2">
+                            <i class="bi bi-bag-fill text-choco"></i>
+                            <span class="font-bold text-gray-900">Belanja</span>
+                            <span class="text-gray-500">{{ $order->created_at->format('d M Y') }}</span>
+                        </div>
     
-   @php
-    // Default Fallback (Jaga-jaga jika status tidak dikenali)
-    $statusColor = 'bg-gray-100 text-gray-500';
-    $statusLabel = 'Unknown Status';
+                @php
+                    // Logika Status Internal (yang sudah kamu buat)
+                    $statusColor = 'bg-gray-100 text-gray-500';
+                    $statusLabel = 'Unknown Status';
 
-    // 1. UNPAID (Belum Bayar / COD) - Sesuai Admin value="unpaid"
-    if ($order->status == 'unpaid') {
-        $statusColor = 'bg-gray-200 text-gray-700';
-        // Cek metode bayar biar labelnya pinter
-        $statusLabel = ($order->payment_method == 'cod') ? 'COD (Bayar Ditempat)' : 'Belum Dibayar';
-    } 
-    // 2. PENDING - Sesuai Admin value="pending"
-    elseif ($order->status == 'pending') {
-        $statusColor = 'bg-orange-100 text-orange-700';
-        $statusLabel = 'Menunggu Konfirmasi Admin';
-    } 
-    // 3. PAID - Sesuai Admin value="paid"
-    elseif ($order->status == 'paid') {
-        $statusColor = 'bg-blue-100 text-blue-700';
-        $statusLabel = 'Lunas / Sedang Diproses';
-    } 
-    // 4. SHIPPING - Sesuai Admin value="shipping"
-    elseif ($order->status == 'shipping') {
-        $statusColor = 'bg-purple-100 text-purple-700';
-        $statusLabel = 'Sedang Dikirim';
-    } 
-    // 5. COMPLETED - Sesuai Admin value="completed"
-    elseif ($order->status == 'completed') {
-        $statusColor = 'bg-green-100 text-green-700';
-        $statusLabel = 'Selesai';
-    } 
-    // 6. CANCELLED - Sesuai Admin value="cancelled"
-    elseif ($order->status == 'cancelled') {
-        $statusColor = 'bg-red-100 text-red-700';
-        $statusLabel = 'Dibatalkan';
-    }
-@endphp
+                    if ($order->status == 'unpaid') {
+                        $statusColor = 'bg-gray-200 text-gray-700';
+                        $statusLabel = ($order->payment_method == 'cod') ? 'COD (Bayar Ditempat)' : 'Belum Dibayar';
+                    } elseif ($order->status == 'pending') {
+                        $statusColor = 'bg-orange-100 text-orange-700';
+                        $statusLabel = 'Menunggu Konfirmasi';
+                    } elseif ($order->status == 'paid') {
+                        $statusColor = 'bg-blue-100 text-blue-700';
+                        $statusLabel = 'Lunas / Proses';
+                    } elseif ($order->status == 'shipping') {
+                        $statusColor = 'bg-purple-100 text-purple-700';
+                        $statusLabel = 'Dikirim';
+                    } elseif ($order->status == 'completed') {
+                        $statusColor = 'bg-green-100 text-green-700';
+                        $statusLabel = 'Selesai';
+                    } elseif ($order->status == 'cancelled') {
+                        $statusColor = 'bg-red-100 text-red-700';
+                        $statusLabel = 'Dibatalkan';
+                    }
 
-<span class="px-3 py-1 rounded-full text-xs font-bold {{ $statusColor }}">
-    {{ $statusLabel }}
-</span>
-    
-    <span class="text-gray-400 text-xs sm:ml-auto">{{ $order->invoice_code }}</span>
-</div>
+                    // Logika Warna Status Midtrans (Khusus Pembayaran Online)
+                    $midtransBadge = '';
+                    if($order->payment_method != 'cod' && $order->status_midtrans) {
+                        $mColor = 'text-gray-500 border-gray-300';
+                        if($order->status_midtrans == 'settlement' || $order->status_midtrans == 'capture') $mColor = 'text-green-600 border-green-600';
+                        if($order->status_midtrans == 'pending') $mColor = 'text-orange-500 border-orange-500';
+                        if(in_array($order->status_midtrans, ['expire', 'cancel', 'deny'])) $mColor = 'text-red-500 border-red-500';
+                        
+                        $midtransBadge = $order->status_midtrans;
+                    }
+                @endphp
+
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold {{ $statusColor }}">
+                                {{ $statusLabel }}
+                            </span>
+
+                            @if($midtransBadge)
+                            <span class="px-2 py-0.5 rounded border text-[10px] uppercase font-mono font-semibold {{ $mColor }}">
+                                Midtrans: {{ $midtransBadge }}
+                            </span>
+                            @endif
+                        </div>
+                            
+                        <span class="text-gray-400 text-xs sm:ml-auto">{{ $order->invoice_code }}</span>
+                        </div>
 
                     <div class="flex items-center gap-1 mb-4 text-sm font-bold text-gray-800">
                         <i class="bi bi-shop text-gold"></i> ChocoScript Official

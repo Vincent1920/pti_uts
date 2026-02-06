@@ -11,8 +11,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log; 
 use Illuminate\Support\Facades\Auth;
+use Midtrans\Notification;
+use Midtrans\Transaction as MidtransTransaction;
 
 class PaymentController extends Controller
 {
@@ -54,87 +56,94 @@ class PaymentController extends Controller
     }
 
         
-  public function process(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'address' => 'required',
-            'phone' => 'required',
-            'city' => 'required',
-            'postal_code' => 'required',
-            'payment_method' => 'required|in:midtrans,cod',
-        ]);
+ public function process(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'address' => 'required',
+        'phone' => 'required',
+        'city' => 'required',
+        'postal_code' => 'required',
+        'payment_method' => 'required|in:midtrans,cod',
+    ]);
 
-        $user = Auth::user();
-        $cartItems = CartItem::with('barang')->where('user_id', $user->id)->get();
+    $user = Auth::user();
+    $cartItems = CartItem::with('barang')->where('user_id', $user->id)->get();
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('shop')->with('error', 'Keranjang belanja kosong.');
-        }
-
-        $invoiceCode = 'INV-' . strtoupper(Str::random(10));
-
-        DB::beginTransaction();
-        try {
-            // 1. Hitung total & diskon
-            $subtotal = $cartItems->sum(fn ($item) => $item->barang->harga * $item->quantity);
-            $diskon = Diskon::where('status', true)->first();
-            $discountAmount = $diskon ? ($subtotal * $diskon->persentase) / 100 : 0;
-            $grandTotal = $subtotal - $discountAmount;
-
-            // 2. Simpan transaksi utama
-            $transaction = Transaction::create([
-                'user_id' => $user->id,
-                'invoice_code' => $invoiceCode,
-                'subtotal' => $subtotal,
-                'discount_amount' => $discountAmount,
-                'grand_total' => $grandTotal,
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'postal_code' => $request->postal_code,
-                'payment_method' => $request->payment_method,
-                'status' => 'pending',
-            ]);
-
-            // 3. Simpan item & kurangi stok
-            foreach ($cartItems as $item) {
-                $barang = $item->barang;
-                if ($barang->jumlah_barang < $item->quantity) {
-                    throw new \Exception("Stok {$barang->title} tidak mencukupi");
-                }
-                $barang->decrement('jumlah_barang', $item->quantity);
-
-                TransactionItem::create([
-                    'transaction_id' => $transaction->id,
-                    'barang_id' => $barang->id,
-                    'product_name' => $barang->title,
-                    'quantity' => $item->quantity,
-                    'price' => $barang->harga,
-                    'subtotal' => $barang->harga * $item->quantity,
-                ]);
-            }
-
-            DB::commit();
-
-            // 4. Arahkan berdasarkan metode pembayaran
-            if ($request->payment_method === 'midtrans') {
-                return $this->handleMidtrans($transaction, $cartItems, $grandTotal);
-            }
-
-            // Jika COD
-            CartItem::where('user_id', $user->id)->delete();
-            return redirect()->route('orders.index')->with('success', 'Pesanan COD berhasil dibuat.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', $e->getMessage());
-        }
+    if ($cartItems->isEmpty()) {
+        return redirect()->route('shop')->with('error', 'Keranjang belanja kosong.');
     }
 
+    $invoiceCode = 'INV-' . strtoupper(Str::random(10));
+
+    DB::beginTransaction();
+    try {
+        $subtotal = $cartItems->sum(fn ($item) => $item->barang->harga * $item->quantity);
+        $diskon = Diskon::where('status', true)->first();
+        $discountAmount = $diskon ? ($subtotal * $diskon->persentase) / 100 : 0;
+        $grandTotal = $subtotal - $discountAmount;
+
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'invoice_code' => $invoiceCode,
+            'subtotal' => $subtotal,
+            'discount_amount' => $discountAmount,
+            'grand_total' => $grandTotal,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'payment_method' => $request->payment_method,
+            'status' => 'pending', 
+        ]);
+
+        foreach ($cartItems as $item) {
+            $barang = $item->barang;
+            if ($barang->jumlah_barang < $item->quantity) {
+                throw new \Exception("Stok {$barang->title} tidak mencukupi");
+            }
+
+            TransactionItem::create([
+                'transaction_id' => $transaction->id,
+                'barang_id' => $barang->id,
+                'product_name' => $barang->title,
+                'quantity' => $item->quantity,
+                'price' => $barang->harga,
+                'subtotal' => $barang->harga * $item->quantity,
+                'diskon' => $diskon ? ($barang->harga * $item->quantity * $diskon->persentase) / 100 : 0,
+            ]);
+            
+            $barang->decrement('jumlah_barang', $item->quantity);
+        }
+
+        DB::commit();
+
+        // LOGIKA SETELAH TRANSAKSI BERHASIL DISIMPAN
+        if ($request->payment_method === 'midtrans') {
+            return $this->handleMidtrans($transaction, $cartItems, $grandTotal);
+        }
+
+        // TAMBAHKAN LOGIKA COD DI SINI
+        // 1. Hapus item di keranjang karena pesanan sudah dibuat
+        CartItem::where('user_id', $user->id)->delete();
+
+        // 2. Redirect ke halaman pesanan dengan pesan sukses
+        return redirect()->route('orders.index')->with('success', 'Pesanan COD berhasil dibuat!');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        
+        // Cek jika request datang dari AJAX (untuk Midtrans) atau form biasa (untuk COD)
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+        
+        return back()->with('error', $e->getMessage());
+    }
+}
 
 
  private function handleMidtrans($transaction, $cartItems, $grandTotal)
@@ -189,33 +198,89 @@ class PaymentController extends Controller
     }
 }
 
-// public function testMidtrans()
-// {
-//     // Konfigurasi Midtrans (Sandbox)
-//     Config::$serverKey = config('midtrans.server_key');
-//     Config::$isProduction = false; // WAJIB false untuk Sandbox
-//     Config::$isSanitized = true;
-//     Config::$is3ds = true;
 
-//     $params = [
-//         'transaction_details' => [
-//             'order_id' => 'ORDER-' . uniqid(),
-//             'gross_amount' => 10000,
-//         ],
-//         'customer_details' => [
-//             'first_name' => 'Aditya',
-//             'email' => 'aditya@example.com',
-//         ],
-//     ];
+public function midtransNotification(Request $request)
+{
+    $payload = $request->all();
+    $rawOrderId = $payload['order_id']; // Contoh: "INV-RDVZDE44GQ-1770398223"
 
-//     try {
-//         $snapToken = Snap::getSnapToken($params);
+    // Potong ID untuk mendapatkan invoice_code asli
+    $lastDash = strrpos($rawOrderId, '-');
+    $invoiceCode = ($lastDash !== false) ? substr($rawOrderId, 0, $lastDash) : $rawOrderId;
 
-//         // 👇 INI YANG KAMU MAU
-//         dd($snapToken);
+    $transaction = Transaction::where('invoice_code', $invoiceCode)->first();
 
-//     } catch (\Exception $e) {
-//         dd('Error Midtrans:', $e->getMessage());
-//     }
-// }
+    if ($transaction) {
+        $transaction->update([
+            'status_midtrans' => $payload['transaction_status'], // Mengisi kolom status_midtrans
+            'status' => ($payload['transaction_status'] == 'settlement') ? 'success' : 'pending'
+        ]);
+        
+        // Hapus keranjang jika lunas
+        if ($payload['transaction_status'] == 'settlement') {
+            CartItem::where('user_id', $transaction->user_id)->delete();
+        }
+    }
+
+    return response()->json(['message' => 'OK']);
+}
+
+// Fungsi pembantu untuk sukses (agar kode lebih rapi)
+private function finalizeSuccessTransaction($transaction, $statusMidtrans)
+{
+    $transaction->update([
+        'status' => 'success',
+        'status_midtrans' => $statusMidtrans
+    ]);
+    
+    // Hapus keranjang user
+    \App\Models\CartItem::where('user_id', $transaction->user_id)->delete();
+}
+public function checkStatus($invoiceCode)
+{
+    // Konfigurasi Server Key
+    Config::$serverKey = config('services.midtrans.serverKey');
+    
+    // Ambil status langsung dari API Midtrans
+    $status = MidtransTransaction::status($invoiceCode);
+    
+    return $status; // Ini akan mengembalikan object berisi transaction_status, gross_amount, dll.
+}
+
+public function showOrderDetail($invoiceCode)
+{
+    $midtransStatus = $this->checkStatus($invoiceCode);
+    
+    // Ambil status spesifiknya
+
+    return view('order.status', compact('statusTerbaru', 'metodePembayaran'));
+}
+
+public function cancelTransaction($invoiceCode)
+{
+    $transaction = Transaction::where('invoice_code', $invoiceCode)
+                               ->where('status', 'pending')
+                               ->first();
+
+    if ($transaction) {
+        DB::beginTransaction();
+        try {
+            // Kembalikan stok
+            foreach ($transaction->items as $item) {
+                $item->barang->increment('jumlah_barang', $item->quantity);
+            }
+            
+            // Ubah status jadi failed/cancelled atau hapus
+            $transaction->update(['status' => 'failed']); 
+            // Atau $transaction->delete(); // Jika ingin benar-benar hilang
+
+            DB::commit();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false]);
+        }
+    }
+}
+
 }

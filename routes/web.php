@@ -61,9 +61,9 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['signed'])->name('verification.verify');
 
 
-
-    Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
+Route::post('/checkout/cancel/{invoice_code}', [PaymentController::class, 'cancelTransaction'])->name('checkout.cancel');
+Route::get('/checkout', [PaymentController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/process', [PaymentController::class, 'process'])->name('checkout.process');
     // Route::post('/checkout/process', [PaymentController::class, 'testMidtrans'])->name('checkout.process');
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +142,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('/diskon/{id}/status', [DiskonController::class, 'toggleStatus'])->name('diskon.status');
 
     // Transaksi Admin
+    
     Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('admin.transactions.index');
     Route::patch('/transactions/{id}/status', [AdminTransactionController::class, 'updateStatus'])->name('admin.transactions.updateStatus');
 });

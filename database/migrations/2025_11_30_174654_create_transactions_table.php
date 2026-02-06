@@ -22,7 +22,7 @@ Schema::create('transactions', function (Blueprint $table) {
     
     // Kolom untuk menyimpan token dari Midtrans (Sangat Penting)
     $table->string('snap_token')->nullable(); 
-    
+    $table->string('midtrans_order_id')->nullable();
     $table->string('name'); 
     $table->string('email');
     $table->string('phone');
@@ -32,7 +32,8 @@ Schema::create('transactions', function (Blueprint $table) {
     $table->string('country')->default('Indonesia');
     
     // Status transaksi (pending, success, settlement, expire, cancel)
-    $table->string('status')->default('pending'); 
+    $table->string('status')->default('pending');
+    $table->string('status_midtrans')->nullable(); 
     $table->string('payment_method')->nullable();
      
 
@@ -49,9 +50,8 @@ Schema::create('transactions', function (Blueprint $table) {
             $table->integer('quantity');
             $table->decimal('price', 15, 2); 
             $table->decimal('subtotal', 15, 2); 
-            
+            $table->decimal('diskon', 10, 2)->default(0);
             $table->timestamps();
-
             $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
             
             // Karena di atas sudah nullable, maka set null ini baru bisa bekerja
