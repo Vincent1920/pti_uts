@@ -201,40 +201,49 @@ class PaymentController extends Controller
 
 public function midtransNotification(Request $request)
 {
+    // 1. Log bahwa ada koneksi masuk dari Midtrans
+    \Illuminate\Support\Facades\Log::info("--- NOTIFIKASI MIDTRANS MASUK ---");
+    
     $payload = $request->all();
+    
+    // 2. Log isi payload kiriman Midtrans untuk melihat status_code dan transaction_status
+    \Illuminate\Support\Facades\Log::info("Payload dari Midtrans: ", $payload);
+
     $rawOrderId = $payload['order_id']; // Contoh: "INV-RDVZDE44GQ-1770398223"
 
     // Potong ID untuk mendapatkan invoice_code asli
     $lastDash = strrpos($rawOrderId, '-');
     $invoiceCode = ($lastDash !== false) ? substr($rawOrderId, 0, $lastDash) : $rawOrderId;
 
+    // 3. Log hasil pemotongan ID untuk memastikan pencarian ke DB sudah benar
+    \Illuminate\Support\Facades\Log::info("Mencari Transaksi dengan Invoice Code: " . $invoiceCode);
+
     $transaction = Transaction::where('invoice_code', $invoiceCode)->first();
 
     if ($transaction) {
+        // 4. Log jika transaksi ditemukan
+        \Illuminate\Support\Facades\Log::info("Transaksi Ditemukan! ID: " . $transaction->id . " | Status Lama: " . $transaction->status);
+
         $transaction->update([
-            'status_midtrans' => $payload['transaction_status'], // Mengisi kolom status_midtrans
-            'status' => ($payload['transaction_status'] == 'settlement') ? 'success' : 'pending'
+            'status_midtrans' => $payload['transaction_status'],
+            'status' => ($payload['transaction_status'] == 'settlement' || $payload['transaction_status'] == 'capture') ? 'success' : 'pending'
         ]);
         
+        // 5. Log perubahan status
+        \Illuminate\Support\Facades\Log::info("Status Berhasil Diupdate ke: " . $transaction->status);
+        
         // Hapus keranjang jika lunas
-        if ($payload['transaction_status'] == 'settlement') {
+        if ($payload['transaction_status'] == 'settlement' || $payload['transaction_status'] == 'capture') {
             CartItem::where('user_id', $transaction->user_id)->delete();
+            \Illuminate\Support\Facades\Log::info("Keranjang belanja user ID " . $transaction->user_id . " telah dihapus.");
         }
+    } else {
+        // 6. Log jika transaksi TIDAK ditemukan (Penyebab utama error 404)
+        \Illuminate\Support\Facades\Log::error("ERROR: Transaksi tidak ditemukan di Database untuk Invoice: " . $invoiceCode);
     }
 
     return response()->json(['message' => 'OK']);
 }
 
-// Fungsi pembantu untuk sukses (agar kode lebih rapi)
-private function finalizeSuccessTransaction($transaction, $statusMidtrans)
-{
-    $transaction->update([
-        'status' => 'success',
-        'status_midtrans' => $statusMidtrans
-    ]);
-    
-    // Hapus keranjang user
-    \App\Models\CartItem::where('user_id', $transaction->user_id)->delete();
-}
 
 }

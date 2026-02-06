@@ -30,7 +30,7 @@ Route::get('/about', [index::class, 'about'])->name('about');
 Route::get('/brand', [index::class, 'brand'])->name('brand');
 Route::get('/learn', [index::class, 'learn'])->name('learn');
 Route::get('/shop', [controller_shop::class, 'index'])->name('shop');
-Route::get('/kategori/{kategori_id}', [controller_shop::class, 'show'])->name('kategori.show');
+// Route::get('/kategori/{kategori_id}', [controller_shop::class, 'show'])->name('kategori.show');
 
 // Autentikasi Tamu (Guest)
 Route::middleware(['guest'])->group(function () {
@@ -43,7 +43,23 @@ Route::middleware(['guest'])->group(function () {
     Route::get('forgot-password/{token}', [controller_login::class, 'forgot_password']); // Cek method di controller, biasanya butuh token
 });
 
-
+Route::prefix('kategori')->name('kategori.')->group(function () {
+    // 1. Letakkan 'create' di paling ATAS agar tidak tertabrak wildcard {id}
+    Route::get('/create', [KategoriController::class, 'create'])->name('create');
+    
+    // 2. Route standar lainnya
+    Route::get('/', [KategoriController::class, 'index'])->name('index');
+    Route::post('/', [KategoriController::class, 'store'])->name('store');
+    
+    // 3. Route dengan parameter/wildcard diletakkan di BAWAH
+    Route::get('/{id}/edit', [KategoriController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [KategoriController::class, 'update'])->name('update');
+    Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('destroy');
+    
+    // Jika Anda punya route show dari controller lain (seperti di log Anda), 
+    // pastikan letaknya di paling bawah agar tidak mengganggu /create
+    // Route::get('/{kategori_id}', [controller_shop::class, 'show']);
+});
 /*
 |--------------------------------------------------------------------------
 | 2. LOGIKA VERIFIKASI EMAIL
@@ -123,16 +139,15 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::post('/update/{barang}', [BarangController::class, 'update']);
 
     // Manajemen Kategori
-  Route::resource('kategori', KategoriController::class);
+//   Route::resource('kategori', KategoriController::class);
 
-//     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori');
-//     Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
-//     Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
-
-//    Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
-//     Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
-//     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
-//     Route::delete('/kategor/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+    // Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+    // Route::get('/kategori/tambah', [KategoriController::class, 'create'])->name('kategori.create');
+    // Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+    // Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+    // Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+    // Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+    // Route::delete('/kategor/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
     // Manajemen Diskon
     Route::get('/diskon', [DiskonController::class, 'index'])->name('diskon.index');

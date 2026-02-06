@@ -8,7 +8,7 @@
         
         <div class="bg-choco px-6 py-4 flex justify-between items-center">
             <h2 class="text-lg font-bold text-white">Tambah Kategori</h2>
-            <a href="{{ route('kategori') }}" class="text-cream hover:text-white text-sm transition">
+            <a href="{{ route('kategori.index') }}" class="text-cream hover:text-white text-sm transition">
                 <i class="bi bi-x-lg"></i>
             </a>
         </div>
@@ -39,7 +39,7 @@
                     <button type="submit" class="w-full bg-choco text-white font-bold py-2.5 rounded-lg hover:bg-opacity-90 transition shadow-md">
                         Simpan Kategori
                     </button>
-                    <a href="{{ route('kategori') }}" class="w-full bg-gray-100 text-gray-600 font-bold py-2.5 rounded-lg hover:bg-gray-200 transition text-center border border-gray-300">
+                    <a href="{{ route('kategori.index') }}" class="w-full bg-gray-100 text-gray-600 font-bold py-2.5 rounded-lg hover:bg-gray-200 transition text-center border border-gray-300">
                         Batal
                     </a>
                 </div>
