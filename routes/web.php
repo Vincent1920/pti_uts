@@ -30,7 +30,7 @@ Route::get('/about', [index::class, 'about'])->name('about');
 Route::get('/brand', [index::class, 'brand'])->name('brand');
 Route::get('/learn', [index::class, 'learn'])->name('learn');
 Route::get('/shop', [controller_shop::class, 'index'])->name('shop');
-// Route::get('/kategori/{kategori_id}', [controller_shop::class, 'show'])->name('kategori.show');
+Route::get('/kategori/{kategori_id}', [controller_shop::class, 'show'])->name('kategori.show');
 
 // Autentikasi Tamu (Guest)
 Route::middleware(['guest'])->group(function () {
