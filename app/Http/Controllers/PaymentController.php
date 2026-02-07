@@ -84,21 +84,21 @@ class PaymentController extends Controller
         $discountAmount = $diskon ? ($subtotal * $diskon->persentase) / 100 : 0;
         $grandTotal = $subtotal - $discountAmount;
 
-        $transaction = Transaction::create([
-            'user_id' => $user->id,
-            'invoice_code' => $invoiceCode,
-            'subtotal' => $subtotal,
-            'discount_amount' => $discountAmount,
-            'grand_total' => $grandTotal,
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'city' => $request->city,
-            'postal_code' => $request->postal_code,
-            'payment_method' => $request->payment_method,
-            'status' => 'pending', 
-        ]);
+          $transaction = Transaction::create([
+        'user_id' => $user->id,
+        'invoice_code' => $invoiceCode,
+        'subtotal' => $subtotal,
+        'discount_amount' => $discountAmount,
+        'grand_total' => $grandTotal,
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'address' => $request->address,
+        'city' => $request->city,
+        'postal_code' => $request->postal_code,
+        'payment_method' => $request->payment_method,
+        'status' => 'pending',
+    ]);
 
         foreach ($cartItems as $item) {
             $barang = $item->barang;
@@ -201,49 +201,38 @@ class PaymentController extends Controller
 
 public function midtransNotification(Request $request)
 {
-    // 1. Log bahwa ada koneksi masuk dari Midtrans
-    \Illuminate\Support\Facades\Log::info("--- NOTIFIKASI MIDTRANS MASUK ---");
-    
+    Log::info('--- NOTIFIKASI MIDTRANS MASUK ---', $request->all());
+
     $payload = $request->all();
-    
-    // 2. Log isi payload kiriman Midtrans untuk melihat status_code dan transaction_status
-    \Illuminate\Support\Facades\Log::info("Payload dari Midtrans: ", $payload);
 
-    $rawOrderId = $payload['order_id']; // Contoh: "INV-RDVZDE44GQ-1770398223"
+    $rawOrderId = $payload['order_id'];
 
-    // Potong ID untuk mendapatkan invoice_code asli
-    $lastDash = strrpos($rawOrderId, '-');
-    $invoiceCode = ($lastDash !== false) ? substr($rawOrderId, 0, $lastDash) : $rawOrderId;
-
-    // 3. Log hasil pemotongan ID untuk memastikan pencarian ke DB sudah benar
-    \Illuminate\Support\Facades\Log::info("Mencari Transaksi dengan Invoice Code: " . $invoiceCode);
+    // Ambil invoice_code
+    $invoiceCode = explode('-', $rawOrderId)[0] . '-' . explode('-', $rawOrderId)[1];
 
     $transaction = Transaction::where('invoice_code', $invoiceCode)->first();
 
-    if ($transaction) {
-        // 4. Log jika transaksi ditemukan
-        \Illuminate\Support\Facades\Log::info("Transaksi Ditemukan! ID: " . $transaction->id . " | Status Lama: " . $transaction->status);
-
-        $transaction->update([
-            'status_midtrans' => $payload['transaction_status'],
-            'status' => ($payload['transaction_status'] == 'settlement' || $payload['transaction_status'] == 'capture') ? 'success' : 'pending'
-        ]);
-        
-        // 5. Log perubahan status
-        \Illuminate\Support\Facades\Log::info("Status Berhasil Diupdate ke: " . $transaction->status);
-        
-        // Hapus keranjang jika lunas
-        if ($payload['transaction_status'] == 'settlement' || $payload['transaction_status'] == 'capture') {
-            CartItem::where('user_id', $transaction->user_id)->delete();
-            \Illuminate\Support\Facades\Log::info("Keranjang belanja user ID " . $transaction->user_id . " telah dihapus.");
-        }
-    } else {
-        // 6. Log jika transaksi TIDAK ditemukan (Penyebab utama error 404)
-        \Illuminate\Support\Facades\Log::error("ERROR: Transaksi tidak ditemukan di Database untuk Invoice: " . $invoiceCode);
+    if (!$transaction) {
+        Log::error("Transaksi tidak ditemukan: " . $invoiceCode);
+        return response()->json(['message' => 'Transaction not found'], 404);
     }
+
+    $transaction->update([
+        'status_midtrans' => $payload['transaction_status'], // 🔥 INI
+        'status' => in_array($payload['transaction_status'], ['settlement', 'capture'])
+            ? 'success'
+            : 'pending',
+    ]);
+
+    if (in_array($payload['transaction_status'], ['settlement', 'capture'])) {
+        CartItem::where('user_id', $transaction->user_id)->delete();
+    }
+
+    Log::info("Status transaksi {$transaction->id} diupdate: {$payload['transaction_status']}");
 
     return response()->json(['message' => 'OK']);
 }
+
 
 
 }

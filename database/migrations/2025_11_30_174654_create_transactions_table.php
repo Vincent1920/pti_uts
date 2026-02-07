@@ -33,7 +33,7 @@ Schema::create('transactions', function (Blueprint $table) {
     
     // Status transaksi (pending, success, settlement, expire, cancel)
     $table->string('status')->default('pending');
-    $table->string('status_midtrans')->nullable(); 
+    $table->string('status_dari_admin')->default('pending'); 
     $table->string('payment_method')->nullable();
      
 

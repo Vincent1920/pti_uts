@@ -180,10 +180,10 @@ public function process(Request $request)
     public function history()
     {
         $user = Auth::user();
-        $orders = Transaction::where('user_id', $user->id)
-                    ->with('items') 
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+       $orders = Transaction::where('user_id', Auth::id())
+            ->with(['items.barang']) // <--- Tambahkan .barang di sini
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('OrderList', compact('orders'));
     }

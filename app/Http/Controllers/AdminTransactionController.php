@@ -9,24 +9,27 @@ class AdminTransactionController extends Controller
 {
     public function index()
     {
-        // Ambil semua transaksi, urutkan dari yang terbaru
-        // Load relasi 'user' dan 'items.barang' (agar gambar produk muncul)
-        // Kita juga load 'items' saja karena snapshot data ada di sana
-        $transactions = Transaction::with(['user', 'items'])->latest()->get();
+        // Tetap menggunakan eager loading agar performa cepat
+        $transactions = Transaction::with(['user', 'items.barang'])
+                        ->latest()
+                        ->get();
 
         return view('admins.transactions.index', compact('transactions'));
     }
 
     public function updateStatus(Request $request, $id)
     {
+        // Sesuaikan validasi dengan opsi yang ada di View Admin
         $request->validate([
-            'status' => 'required|in:unpaid,pending,paid,shipping,completed,cancelled'
+            'status_dari_admin' => 'required|in:pending,processing,shipping,completed,cancelled'
         ]);
 
         $transaction = Transaction::findOrFail($id);
-        $transaction->status = $request->status;
+        
+        // Update kolom 'status_dari_admin', bukan kolom 'status' (milik Midtrans)
+        $transaction->status_dari_admin = $request->status_dari_admin;
         $transaction->save();
 
-        return back()->with('success', 'Status pesanan berhasil diperbarui!');
+        return back()->with('success', 'Progres pesanan #' . $transaction->invoice_code . ' berhasil diperbarui!');
     }
 }

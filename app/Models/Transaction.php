@@ -15,9 +15,9 @@ class Transaction extends Model
     'subtotal', 
     'discount_amount', 
     'grand_total', 
-    'snap_token', // <--- WAJIB ADA
+    'snap_token', 
     'status',
-    'status_midtrasn',
+   'status_dari_admin', 
     'name', 
     'email', 
     'phone', 
