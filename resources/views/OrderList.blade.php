@@ -112,7 +112,7 @@
                     @if($midtransBadge && $order->payment_method != 'cod')
                     <span
                         class="px-2 py-0.5 rounded border text-[10px] uppercase font-mono font-semibold {{ $mColor }}">
-                        Midtrans: {{ $midtransBadge }}
+                        Online Pay: {{ $midtransBadge }}
                     </span>
                     @endif
                 </div>
