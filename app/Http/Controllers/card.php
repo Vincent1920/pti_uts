@@ -123,5 +123,15 @@ public function update(Request $request, $id){
 
         return redirect()->route('cart')->with('success', 'Keranjang berhasil diperbarui');
     }
-    
+    public function remove($id)
+{
+    // Cari item berdasarkan ID dan pastikan milik user yang sedang login
+    $cartItem = CartItem::where('id', $id)
+                        ->where('user_id', Auth::id())
+                        ->firstOrFail();
+
+    $cartItem->delete();
+
+    return redirect()->route('cart')->with('success', 'Barang berhasil dihapus dari keranjang');
+}
 }

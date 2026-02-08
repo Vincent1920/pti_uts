@@ -22,10 +22,15 @@ class Barang extends Model
         return $this->belongsTo(Kategori::class);
     }
  
-
+public function transactionItems()
+{
+    return $this->hasMany(TransactionItem::class, 'barang_id');
+}
 // Barang.php
 public function cartItems()
 {
     return $this->hasMany(CartItem::class);
 }
+
+
 }

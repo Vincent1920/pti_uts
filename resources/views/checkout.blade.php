@@ -53,8 +53,9 @@
                 </div> --}}
 
             <div class="mb-8">
-              <form action="{{ route('checkout.process') }}" method="POST" class="space-y-6" enctype="multipart/form-data">
-                @csrf
+                <form action="{{ route('checkout.process') }}" method="POST" class="space-y-6"
+                    enctype="multipart/form-data">
+                    @csrf
 
                     <input type="hidden" name="final_price" value="{{ $finalPrice }}">
 
@@ -103,26 +104,14 @@
                                     <label
                                         class="flex items-start p-4 border rounded-lg cursor-pointer hover:bg-alice transition has-[:checked]:border-choco has-[:checked]:bg-alice shadow-sm">
                                         <input type="radio" name="payment_method" value="midtrans"
-                                            class="mt-1 accent-choco" onchange="toggleMidtransOptions(true)" required>
-                                        <div class="ml-3 w-full">
-                                            <span class="block font-bold text-gray-800">Pembayaran Otomatis
-                                                (Midtrans)</span>
-                                            <span class="text-xs text-gray-500">Proses instan via QRIS, GoPay, atau
-                                                Virtual Account</span>
+                                            class="mt-1 accent-choco" required>
 
-                                            <div id="midtrans-dropdown-container" class="hidden mt-4 animate-fadeIn">
-                                                <label
-                                                    class="text-[10px] font-bold text-choco uppercase mb-1 block">Pilih
-                                                    Tipe Pembayaran:</label>
-                                                <select name="midtrans_type"
-                                                    class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm bg-white focus:ring-1 focus:ring-choco outline-none">
-                                                    <option value="all">Semua Metode (Rekomendasi)</option>
-                                                    <option value="qris">QRIS (GoPay, Dana, ShopeePay, LinkAja)</option>
-                                                    <option value="bank_transfer">Virtual Account (BCA, Mandiri, BNI,
-                                                        BRI)</option>
-                                                    <option value="echannel">Mandiri Bill Payment</option>
-                                                </select>
-                                            </div>
+                                        <div class="ml-3 w-full">
+                                            <span class="block font-bold text-gray-800">Pembayaran Online</span>
+
+                                            <span class="text-xs text-gray-500">
+                                                Bayar otomatis via Transfer Bank (VA), QRIS, atau E-Wallet.
+                                            </span>
                                         </div>
                                     </label>
                                 </div>
@@ -147,7 +136,7 @@
                                 class="text-choco_light hover:text-choco text-sm flex items-center transition font-medium">
                                 <i class="bi bi-chevron-left text-xs mr-2"></i> Kembali ke Keranjang
                             </a>
-                            <button type="submit"
+                            <button type="submit" id="pay-button"
                                 class="w-full sm:w-auto bg-choco hover:bg-choco_light text-white font-bold py-4 px-10 rounded-lg transition duration-300 text-sm shadow-lg transform hover:-translate-y-1 active:scale-95">
                                 Konfirmasi & Buat Pesanan
                             </button>
@@ -213,6 +202,7 @@
 
     </div>
 </div>
+<<<<<<< HEAD
 <script>
     function toggleMidtransOptions(isMidtrans) {
         const container = document.getElementById('midtrans-dropdown-container');
@@ -230,6 +220,8 @@
     }
 </script>
 
+=======
+>>>>>>> bb8fc8355ad3eedea55c976641db0750c36280f6
 <style>
     /* Tambahkan sedikit animasi agar dropdown tidak kaku */
     .animate-fadeIn {
@@ -248,4 +240,138 @@
         }
     }
 </style>
+<<<<<<< HEAD
+=======
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        confirmButtonColor: '#463126',
+        confirmButtonText: 'OK',
+        color: '#48311B'
+    });
+    @endif
+    @if(session('error'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: "{{ session('error') }}",
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Coba Lagi'
+    });
+    @endif
+    @if($errors -> any())
+    Swal.fire({
+        icon: 'warning',
+        title: 'Periksa Inputan!',
+        html: "{!! implode('<br>', $errors->all()) !!}",
+        confirmButtonColor: '#f6d59e',
+        confirmButtonText: 'OK',
+        color: '#48311B'
+    });
+    @endif
+</script>
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="{{ config('services.midtrans.clientKey') }}"></script>
+
+<script>
+    const checkoutForm = document.querySelector('form[action="{{ route("checkout.process") }}"]');
+    const payButton = document.getElementById('pay-button');
+
+    checkoutForm.addEventListener('submit', async function (e) {
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+        if (paymentMethod === 'midtrans') {
+            e.preventDefault(); 
+
+            payButton.disabled = true;
+            payButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+
+            try {
+                const formData = new FormData(checkoutForm);
+                const response = await fetch("{{ route('checkout.process') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function (result) {
+                            Swal.fire('Berhasil!', 'Pembayaran Anda telah diterima.', 'success')
+                                .then(() => window.location.href = "{{ route('orders.index') }}");
+                        },
+                        onPending: function (result) {
+                            Swal.fire('Pending', 'Segera selesaikan pembayaran Anda.', 'info')
+                                .then(() => window.location.href = "{{ route('orders.index') }}");
+                        },
+                        onError: function (result) {
+                            Swal.fire('Gagal', 'Pembayaran gagal diproses.', 'error');
+                            payButton.disabled = false;
+                            payButton.innerHTML = "Konfirmasi & Buat Pesanan";
+                        },
+                        onClose: function () {
+                            // Handler saat user menutup popup Midtrans
+                            Swal.fire({
+                                title: 'Batal Bayar?',
+                                text: "Pesanan ini akan tetap tersimpan. Ingin membatalkannya sekarang?",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#d33',
+                                cancelButtonColor: '#463126',
+                                confirmButtonText: 'Ya, Batalkan Pesanan',
+                                cancelButtonText: 'Nanti saja (Simpan)'
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    // Panggil route cancelTransaction
+                                    try {
+                                        const cancelRes = await fetch(`/checkout/cancel/${data.invoice_code}`, {
+                                            method: 'POST',
+                                            headers: {
+                                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                                                'Accept': 'application/json'
+                                            }
+                                        });
+                                        const cancelData = await cancelRes.json();
+                                        
+                                        if(cancelData.success) {
+                                            Swal.fire('Dibatalkan', 'Pesanan dibatalkan dan stok dikembalikan.', 'success')
+                                                .then(() => window.location.reload());
+                                        }
+                                    } catch (err) {
+                                        console.error("Gagal membatalkan:", err);
+                                    }
+                                } else {
+                                    // Jika pilih simpan, arahkan ke daftar transaksi
+                                    window.location.href = "{{ route('orders.index') }}";
+                                }
+                            });
+
+                            payButton.disabled = false;
+                            payButton.innerHTML = "Konfirmasi & Buat Pesanan";
+                        }
+                    });
+                } else {
+                    Swal.fire('Stok Habis', data.message, 'error');
+                    payButton.disabled = false;
+                    payButton.innerHTML = "Konfirmasi & Buat Pesanan";
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Terjadi kesalahan sistem.', 'error');
+                payButton.disabled = false;
+                payButton.innerHTML = "Konfirmasi & Buat Pesanan";
+            }
+        }
+    });
+</script>
+>>>>>>> bb8fc8355ad3eedea55c976641db0750c36280f6
 @endsection

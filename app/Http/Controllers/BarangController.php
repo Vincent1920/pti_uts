@@ -48,7 +48,7 @@ class BarangController extends Controller
     // 1. Validasi Input
     $validated = $request->validate([
         'title'        => 'required|string|max:255',
-        'img'          => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'img'          => 'required',
         'deskripsi'    => 'required|string',
         'harga'        => 'required|numeric', // Pastikan input hidden 'harga' yang diterima
         'berat_barang' => 'required',
@@ -128,7 +128,7 @@ class BarangController extends Controller
         'deskripsi' => 'nullable|string',
         'jumlah_barang' => 'required|numeric|min:1',
         'kategori_id' => 'required|exists:kategoris,id', 
-        'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', 
+          'img' => 'required|file'
     ]);
 
     // Temukan barang berdasarkan ID

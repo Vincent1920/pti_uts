@@ -20,15 +20,23 @@ class controller_shop extends Controller
         ]);
     }
     
-    public function show($kategoriId){  
-        $kategori = Kategori::findOrFail($kategoriId);
-        $barangs = $kategori->barangs; // Mengambil barang berdas
-        return view('pages.shop.kategori', [
-            'barangs' => $barangs,
-            'kategori' => $kategori // Ini adalah variabel yang harus ada di view
-        ]);
+    public function show($kategoriId)
+{  
+    // 1. Ambil kategori yang sedang dipilih (untuk konten utama)
+    $kategori = Kategori::findOrFail($kategoriId);
+    
+    // 2. Ambil semua kategori (untuk Sidebar agar tidak error "Undefined Variable")
+    $kategoris = Kategori::all(); 
 
-    }
+    // 3. Ambil barang berdasarkan kategori tersebut
+    $barangs = $kategori->barangs; 
+
+    return view('pages.shop.kategori', [
+        'barangs'   => $barangs,
+        'kategori'  => $kategori,
+        'kategoris' => $kategoris // Tambahkan ini agar @forelse di view tidak error
+    ]);
+}
 
 public function showKategori(Kategori $kategori)
 {

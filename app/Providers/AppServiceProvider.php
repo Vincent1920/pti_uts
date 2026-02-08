@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
 public function boot()
 {
+<<<<<<< HEAD
     \Midtrans\Config::$serverKey = config('midtrans.server_key');
     \Midtrans\Config::$isProduction = config('midtrans.is_production');
     \Midtrans\Config::$isSanitized = true;
@@ -28,5 +29,8 @@ public function boot()
     \Midtrans\Config::$curlOptions = [
         CURLOPT_SSL_VERIFYPEER => false,
     ];
+=======
+
+>>>>>>> bb8fc8355ad3eedea55c976641db0750c36280f6
 }
 }

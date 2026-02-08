@@ -12,6 +12,7 @@ class CartItem extends Model
     use HasFactory;
     
     protected $fillable = ['user_id', 'barang_id', 'quantity'];
+    protected $table = 'cart_items';
 
     public function barang()
     {

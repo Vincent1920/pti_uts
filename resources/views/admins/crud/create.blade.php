@@ -4,7 +4,7 @@
 <div class="max-w-3xl mx-auto">
     
     <div class="border-b border-gray-200 pb-4 mb-6">
-        <h1 class="text-2xl font-bold text-choco">Create New Barang</h1>
+        <h1 class="text-2xl font-bold text-choco">Tambah Barang</h1>
         <p class="text-sm text-gray-500 mt-1">Isi formulir di bawah untuk menambahkan produk baru.</p>
     </div>
 

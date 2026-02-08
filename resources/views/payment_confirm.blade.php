@@ -1,20 +1,8 @@
 @extends('index')
 
 @section('container-home')
-<div class="w-full min-h-screen bg-cream flex justify-center items-center">
-    <div class="bg-white p-10 rounded-2xl shadow-2xl text-center border-t-4 border-choco max-w-sm">
-        <div class="mb-6">
-            <i class="bi bi-wallet2 text-5xl text-choco"></i>
-        </div>
-        <h2 class="text-2xl font-kotta text-gray-900 mb-2">Selesaikan Pembayaran</h2>
-        <p class="text-sm text-gray-500 mb-8">Silakan klik tombol di bawah jika jendela pembayaran aman tidak muncul otomatis.</p>
-        
-        <button id="pay-button" class="w-full bg-choco hover:bg-choco_light text-white font-bold py-4 rounded-xl transition shadow-lg transform hover:-translate-y-1">
-            Bayar Sekarang
-        </button>
-    </div>
-</div>
 
+<<<<<<< HEAD
 <script type="text/javascript"
         src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="Mid-client-U32ikRzP-WQGbNGj">
@@ -55,5 +43,47 @@
     window.onload = function() {
         setTimeout(openSnap, 500);
     };
-</script>
+=======
+<div class="container text-center">
+    <h2>Konfirmasi Pembayaran</h2>
+    <p>Pesanan Anda telah dicatat. Silakan klik tombol di bawah untuk membayar.</p>
+    
+    <button id="pay-button" class="btn btn-primary">Bayar Sekarang</button>
+</div>
 @endsection
+
+@push('scripts') 
+{{-- Gunakan @push agar script berada di bawah setelah library lain --}}
+
+<script type="text/javascript" 
+        src="https://app.sandbox.midtrans.com/snap/snap.js" 
+        data-client-key="{{ config('services.midtrans.clientKey') }}">
+</script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const payButton = document.getElementById('pay-button');
+        
+        payButton.onclick = function(e) {
+            e.preventDefault();
+            
+            // Variabel $snapToken ini dipasok oleh Controller
+            window.snap.pay('{{ $snapToken }}', {
+                onSuccess: function(result) { 
+                    window.location.href = "{{ route('home') }}"; 
+                },
+                onPending: function(result) { 
+                    alert("Menunggu Pembayaran..."); 
+                },
+                onError: function(result) { 
+                    alert("Pembayaran Gagal!"); 
+                },
+                onClose: function() {
+                    alert('Anda menutup popup sebelum membayar.');
+                }
+            });
+        };
+    });
+>>>>>>> bb8fc8355ad3eedea55c976641db0750c36280f6
+</script>
+@endpush
