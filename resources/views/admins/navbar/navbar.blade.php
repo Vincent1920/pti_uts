@@ -25,11 +25,11 @@
                     </button>
                 </a>
 
-                <a href="{{route('cart_admin')}} " class="block w-full">
+                {{-- <a href="{{route('cart_admin')}} " class="block w-full">
                     <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
                         <span>List Cart</span>
                     </button>
-                </a>
+                </a> --}}
                 <a href="{{route('admin.transactions.index')}} " class="block w-full">
                     <button class="admin-custom-btn admin-btn-5 w-full text-left px-4 py-2 rounded hover:bg-cream hover:text-choco transition">
                         <span>transactions</span>
